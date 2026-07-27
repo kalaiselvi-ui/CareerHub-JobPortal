@@ -1,10 +1,21 @@
+import { Routes, Route } from "react-router-dom";
+import MainLayout from "./layouts/MainLayout.tsx";
+import { lazy, Suspense } from "react";
+import LoadingSpinner from "./components/common/LoadingSpinner.tsx";
+
+const Home = lazy(() => import("./pages/Home.tsx"));
+
 const App = () => {
   return (
-    <div>
-      <h1 className="text-3xl font-bold underline text-red-700">
-        Hello world!
-      </h1>
-    </div>
+    <>
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+          </Route>
+        </Routes>
+      </Suspense>
+    </>
   );
 };
 
