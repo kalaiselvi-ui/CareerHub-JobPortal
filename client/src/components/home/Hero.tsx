@@ -28,7 +28,7 @@ export const HeroSection: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-2">
-            <button className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-medium px-7 py-3.5 rounded-xl shadow-lg shadow-[#2563EB]/25 transition-all duration-200 hover:-translate-y-0.5">
+            <button className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-medium px-7 py-3.5 rounded-xl shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5">
               <span>Find Jobs</span>
               <Search className="w-4 h-4" />
             </button>
