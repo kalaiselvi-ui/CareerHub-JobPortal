@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import TopFilters from "../components/job/TopFilters.tsx";
 import JobList from "../components/job/JobList.tsx";
 import JobDetails from "../components/job/JobDetails.tsx";
-import type { DetailedJob } from "../components/type/job.type.ts";
+import type { DetailedJob } from "../type/job.type.ts";
 import JobData from "../data/jobData.ts";
 
 export const JobsPage: React.FC = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import JobCard from "../common/JobCard.tsx"; // Reusing your existing JobCard
-import type { DetailedJob } from "../type/job.type.ts";
+import type { DetailedJob } from "../../type/job.type.ts";
 
 interface JobListProps {
   jobs: DetailedJob[];

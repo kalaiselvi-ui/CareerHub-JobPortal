@@ -8,7 +8,7 @@ import {
   Send,
   CheckCircle2,
 } from "lucide-react";
-import type { DetailedJob } from "../type/job.type.ts";
+import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
 
 interface JobDetailsProps {

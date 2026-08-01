@@ -1,4 +1,4 @@
-import type { DetailedJob } from "../components/type/job.type.ts";
+import type { DetailedJob } from "../type/job.type.ts";
 
 const JobData: DetailedJob[] = [
   {

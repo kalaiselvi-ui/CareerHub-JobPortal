@@ -1,5 +1,5 @@
 import { MapPin, Bookmark, Briefcase, Building, Clock } from "lucide-react";
-import type { DetailedJob } from "../type/job.type.ts";
+import type { DetailedJob } from "../../type/job.type.ts";
 import { Link } from "react-router-dom";
 import { formatPostedDate } from "../../utils/formatDate.ts";
 
