@@ -4,6 +4,7 @@ import { lazy, Suspense } from "react";
 import LoadingSpinner from "./components/common/LoadingSpinner.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
+const Jobs = lazy(() => import("./pages/Jobs.tsx"));
 
 const App = () => {
   return (
@@ -12,6 +13,8 @@ const App = () => {
         <Routes>
           <Route path="/" element={<MainLayout />}>
             <Route index element={<Home />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/jobs/:id" element={<Jobs />} />
           </Route>
         </Routes>
       </Suspense>

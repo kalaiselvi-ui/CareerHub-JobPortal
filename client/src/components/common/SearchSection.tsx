@@ -1,19 +1,36 @@
 import React from "react";
 import { Search, MapPin, Briefcase } from "lucide-react";
 
-export const SearchSection: React.FC = () => {
+interface SearchSectionProps {
+  compact?: boolean;
+}
+
+export const SearchSection: React.FC<SearchSectionProps> = ({
+  compact = false,
+}) => {
   return (
-    <section className="bg-surface-light py-12 md:py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto text-center space-y-8">
+    <section
+      className={`bg-surface-light px-4 sm:px-6 lg:px-8 ${
+        compact ? "py-4" : "py-12 md:py-16"
+      }`}
+    >
+      {" "}
+      <div
+        className={`max-w-7xl mx-auto text-center ${
+          compact ? "space-y-4" : "space-y-8"
+        }`}
+      >
+        {" "}
         <div className="max-w-2xl mx-auto space-y-3">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-surface-dark tracking-tight">
-            Search Your Next Opportunity
-          </h2>
+          <h2
+            className={`font-extrabold text-surface-dark tracking-tight ${
+              compact ? "text-2xl md:text-3xl" : "text-3xl sm:text-4xl"
+            }`}
+          ></h2>
           <p className="text-base sm:text-lg text-surface-dark/70">
             Find jobs that match your skills, experience and career goals.
           </p>
         </div>
-
         <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl shadow-surface-dark/5 border border-border-subtle max-w-5xl mx-auto">
           <form
             onSubmit={(e) => e.preventDefault()}
