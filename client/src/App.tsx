@@ -7,6 +7,7 @@ import Login from "./pages/auth/Login.tsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.tsx";
 import ResetPassword from "./pages/auth/ResetPassword.tsx";
 import { Toaster } from "react-hot-toast";
+import GuestRoute from "./components/routes/GuestRoute.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -22,12 +23,15 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/jobs" element={<Jobs />} />
             <Route path="/jobs/:id" element={<Jobs />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route element={<GuestRoute />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+            </Route>
             <Route path="/companies" element={<Companies />} />
             <Route path="/about" element={<About />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+
             <Route path="*" element={<div>404 - Page Not Found</div>} />
           </Route>
         </Routes>

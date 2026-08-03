@@ -3,41 +3,36 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Mail, Lock } from "lucide-react";
-import axios from "axios";
 import { SocialLogin } from "./SocialLogin";
 import {
   loginSchema,
   type LoginSchemaType,
 } from "../../schemas/loginSchema.ts";
+import { authMutation } from "../../mutations/authMutation.ts";
+import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/authStore.ts";
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
-
+  const { loginMutation } = authMutation();
+  const login = useAuthStore((state) => state.login);
   const onSubmit = async (data: LoginSchemaType) => {
-    setApiError(null);
-    try {
-      // Example API call:
-      // await axios.post('/api/auth/login', data);
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      navigate("/dashboard");
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        setApiError(err.response.data.message);
-      } else {
-        setApiError("Something went wrong during login. Please try again.");
-      }
-    }
+    loginMutation.mutate(data, {
+      onSuccess: (response) => {
+        login(response.user, response.token);
+        toast.success(`Login Successfully ${response?.user?.fullName}`);
+        navigate("/");
+      },
+    });
   };
 
   return (
@@ -49,9 +44,9 @@ export const LoginForm: React.FC = () => {
         </p>
       </div>
 
-      {apiError && (
+      {loginMutation.isError && (
         <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
-          {apiError}
+          {loginMutation.error.message}
         </div>
       )}
 
@@ -139,10 +134,10 @@ export const LoginForm: React.FC = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={loginMutation.isPending}
           className="w-full mt-2 py-3 px-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl shadow-md shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
         >
-          {isSubmitting ? (
+          {loginMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Logging In...</span>
