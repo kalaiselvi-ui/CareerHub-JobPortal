@@ -20,7 +20,7 @@ export const registerSchema = z
       .regex(/[0-9]/, "Must contain at least one number")
       .regex(/[^a-zA-Z0-9]/, "Must contain at least one special character"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    role: z.enum(["job_seeker", "recruiter"], {
+    role: z.enum(["candidate", "recruiter"], {
       message: "Please select a role", // <--- Changed from required_error
     }),
   })

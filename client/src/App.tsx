@@ -6,6 +6,7 @@ import Register from "./pages/auth/Register.tsx";
 import Login from "./pages/auth/Login.tsx";
 import ForgotPassword from "./pages/auth/ForgotPassword.tsx";
 import ResetPassword from "./pages/auth/ResetPassword.tsx";
+import { Toaster } from "react-hot-toast";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -31,6 +32,12 @@ const App = () => {
           </Route>
         </Routes>
       </Suspense>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+        }}
+      />
     </>
   );
 };

@@ -12,54 +12,50 @@ import {
   UserCheck,
   Briefcase,
 } from "lucide-react";
-import axios from "axios";
 import { SocialLogin } from "./SocialLogin";
 import {
   registerSchema,
   type RegisterSchemaType,
 } from "../../schemas/registerSchema.ts";
+import { authMutation } from "../../mutations/authMutation.ts";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export const RegisterForm: React.FC = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      role: "job_seeker",
+      role: "candidate",
     },
   });
+
+  const { registerMutation } = authMutation();
 
   const selectedRole = watch("role");
 
   const onSubmit = async (data: RegisterSchemaType) => {
-    setApiError(null);
-    try {
-      // Example API call using Axios (replace URL with your endpoint)
-      // await axios.post('/api/auth/register', data);
-
-      // Simulating API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Navigate upon success
-      navigate("/verify-email");
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        setApiError(err.response.data.message);
-      } else {
-        setApiError(
-          "Something went wrong during registration. Please try again.",
-        );
-      }
-    }
+    registerMutation.mutate(data, {
+      onSuccess: (response) => {
+        console.log(response);
+        toast.success("User created successfully");
+        navigate("/login");
+      },
+      onError: (err) => {
+        if (axios.isAxiosError(err)) {
+          console.log("Backend Error Details:", err.response?.data);
+        }
+      },
+    });
   };
 
   return (
@@ -73,9 +69,9 @@ export const RegisterForm: React.FC = () => {
         </p>
       </div>
 
-      {apiError && (
+      {registerMutation.isError && (
         <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
-          {apiError}
+          {registerMutation.error.message}
         </div>
       )}
 
@@ -88,9 +84,9 @@ export const RegisterForm: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => setValue("role", "job_seeker")}
+              onClick={() => setValue("role", "candidate")}
               className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all ${
-                selectedRole === "job_seeker"
+                selectedRole === "candidate"
                   ? "border-primary bg-primary/10 text-primary ring-2 ring-primary/20"
                   : "border-border-subtle text-surface-dark/70 hover:bg-surface-light"
               }`}
@@ -269,10 +265,10 @@ export const RegisterForm: React.FC = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={registerMutation.isPending}
           className="w-full mt-2 py-3 px-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl shadow-md shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
         >
-          {isSubmitting ? (
+          {registerMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Creating Account...</span>
