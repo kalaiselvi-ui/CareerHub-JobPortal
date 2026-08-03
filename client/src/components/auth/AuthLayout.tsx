@@ -7,12 +7,12 @@ interface AuthLayoutProps {
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen w-full flex bg-slate-50 text-slate-900">
+    <div className="min-h-screen w-full flex bg-surface-light text-surface-dark">
       {/* Left side: Hero / Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-700 p-12 flex-col justify-between text-white relative overflow-hidden">
+      <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-primary to-primary-hover p-12 flex-col justify-between text-white relative overflow-hidden">
         {/* Background Decorative Blur Circles */}
-        <div className="absolute -top-20 -left-20 w-80 h-80 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-secondary/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Header Logo */}
         <div className="flex items-center gap-3 z-10">
@@ -27,29 +27,29 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
           <h1 className="text-4xl xl:text-5xl font-extrabold leading-tight">
             Connect with Opportunity & Build Your Dream Career
           </h1>
-          <p className="text-blue-100 text-lg leading-relaxed">
+          <p className="text-white/80 text-lg leading-relaxed">
             Join thousands of professionals finding top tech roles, or hire
             elite talent tailored to your team's vision.
           </p>
 
-          <ul className="space-y-3 pt-4 text-blue-100">
+          <ul className="space-y-3 pt-4 text-white/90">
             <li className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-blue-300 shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
               <span>Personalized job recommendations</span>
             </li>
             <li className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-blue-300 shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
               <span>Direct connect with recruiters and hiring managers</span>
             </li>
             <li className="flex items-center gap-3">
-              <CheckCircle2 className="w-5 h-5 text-blue-300 shrink-0" />
+              <CheckCircle2 className="w-5 h-5 text-secondary shrink-0" />
               <span>Real-time application status updates</span>
             </li>
           </ul>
         </div>
 
         {/* Footer info */}
-        <div className="z-10 text-xs text-blue-200">
+        <div className="z-10 text-xs text-white/60">
           © {new Date().getFullYear()} CareerHub Inc. All rights reserved.
         </div>
       </div>

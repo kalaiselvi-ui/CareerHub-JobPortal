@@ -2,9 +2,9 @@ import React, { useState, useMemo } from "react";
 
 import { Building2, RefreshCw } from "lucide-react";
 import { MOCK_COMPANIES, MOCK_INDUSTRIES } from "../data/companyData.ts";
-import { CompanySearch } from "../components/company/companySearch.tsx";
 import { IndustryCard } from "../components/company/IndustryCard.tsx";
 import { CompanyCard } from "../components/company/CompanyCard.tsx";
+import { CompanySearch } from "../components/company/CompanySearch.tsx";
 
 export const Companies: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +39,7 @@ export const Companies: React.FC = () => {
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Hero Section */}
         <div className="text-center space-y-4 max-w-3xl mx-auto pt-4">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-surface-dark tracking-tight">
             Explore Companies
           </h1>
           <p className="text-lg text-slate-600 leading-relaxed">
@@ -57,13 +57,13 @@ export const Companies: React.FC = () => {
         {/* Industry Categories */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900">
+            <h2 className="text-xl font-bold text-surface-dark">
               Popular Industries
             </h2>
             {selectedIndustry && (
               <button
                 onClick={() => setSelectedIndustry(null)}
-                className="text-xs font-semibold text-blue-600 hover:underline"
+                className="text-xs font-semibold text-primary hover:underline"
               >
                 Clear Industry Filter
               </button>
@@ -83,8 +83,8 @@ export const Companies: React.FC = () => {
 
         {/* Companies Grid */}
         <div className="space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-4">
-            <h2 className="text-xl font-bold text-slate-900">
+          <div className="flex items-center justify-between border-b border-border-subtle pb-4">
+            <h2 className="text-xl font-bold text-surface-dark">
               Featured Employers
             </h2>
             <span className="text-sm font-medium text-slate-500">
@@ -100,11 +100,11 @@ export const Companies: React.FC = () => {
             </div>
           ) : (
             /* Empty State */
-            <div className="bg-white rounded-xl border border-slate-200 p-12 text-center space-y-4 max-w-md mx-auto my-8">
+            <div className="bg-white rounded-xl border border-border-subtle p-12 text-center space-y-4 max-w-md mx-auto my-8">
               <div className="p-3 bg-slate-100 rounded-full w-fit mx-auto text-slate-400">
                 <Building2 className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-surface-dark">
                 No companies found
               </h3>
               <p className="text-sm text-slate-500">
@@ -113,7 +113,7 @@ export const Companies: React.FC = () => {
               </p>
               <button
                 onClick={handleResetFilters}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-xl text-sm font-medium hover:bg-primary transition-colors"
               >
                 <RefreshCw className="w-4 h-4" />
                 Reset Filters

@@ -1,0 +1,12 @@
+import { z } from "zod";
+
+export const forgotPasswordSchema = z.object({
+  email: z
+    .string()
+    .trim() // Removes leading/trailing spaces
+    .toLowerCase() // Automatically sanitizes email input
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
+});
+
+export type ForgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;

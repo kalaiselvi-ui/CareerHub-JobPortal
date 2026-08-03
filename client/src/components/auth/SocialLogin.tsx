@@ -14,7 +14,7 @@ export const SocialLogin: React.FC = () => {
   return (
     <div className="space-y-4">
       <div className="relative flex items-center justify-center my-6">
-        <div className="border-t border-slate-200 w-full" />
+        <div className="border-t border-border-subtle w-full" />
         <span className="bg-white px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider absolute">
           OR
         </span>
@@ -24,7 +24,7 @@ export const SocialLogin: React.FC = () => {
         <button
           type="button"
           onClick={handleGoogleAuth}
-          className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-200 rounded-xl bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-colors shadow-sm"
+          className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-border-subtle rounded-xl bg-white text-sm font-medium text-surface-dark hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors shadow-sm"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -50,7 +50,7 @@ export const SocialLogin: React.FC = () => {
         <button
           type="button"
           onClick={handleGithubAuth}
-          className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-slate-200 rounded-xl bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-colors shadow-sm"
+          className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-border-subtle rounded-xl bg-white text-sm font-medium text-surface-dark hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors shadow-sm"
         >
           <svg
             className="w-5 h-5 text-slate-800 fill-current"
