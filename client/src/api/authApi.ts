@@ -2,6 +2,8 @@ import axios from "axios";
 import type { RegisterSchemaType } from "../schemas/registerSchema.ts";
 import axiosInstance from "./axiosInstance.ts";
 import type { LoginSchemaType } from "../schemas/loginSchema.ts";
+import type { ForgotPasswordSchemaType } from "../schemas/forgotPasswordSchema.ts";
+import type { ResetPasswordSchemaType } from "../schemas/resetPasswordSchema.ts";
 
 export const registerUser = async (data: RegisterSchemaType) => {
   try {
@@ -22,6 +24,43 @@ export const loginUser = async (data: LoginSchemaType) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       throw new Error(error.response?.data?.message || "Login failed");
+    }
+  }
+  throw new Error("Something went wrong");
+};
+
+export const forgotPassword = async (email: ForgotPasswordSchemaType) => {
+  try {
+    const response = await axiosInstance.post(
+      "/api/user/forgot-password",
+      email,
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(
+        error.response?.data?.message || "Reset link failed to send",
+      );
+    }
+  }
+  throw new Error("Something went wrong");
+};
+export const resetPassword = async ({
+  token,
+  password,
+}: {
+  token: string;
+  password: string;
+}) => {
+  try {
+    const response = await axiosInstance.post(
+      `/api/user/reset-password/${token}`,
+      { password },
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error(error.response?.data?.message || "password reset failed");
     }
   }
   throw new Error("Something went wrong");

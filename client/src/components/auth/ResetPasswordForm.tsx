@@ -1,57 +1,49 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { Eye, EyeOff, Loader2, Lock } from "lucide-react";
-import axios from "axios";
 import {
   resetPasswordSchema,
   type ResetPasswordSchemaType,
 } from "../../schemas/resetPasswordSchema.ts";
+import { authMutation } from "../../mutations/authMutation.ts";
+import toast from "react-hot-toast";
 
 export const ResetPasswordForm: React.FC = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get("token"); // Extracts ?token=xxx from URL
+  // const [searchParams] = useSearchParams();
+  // const token = searchParams.get("token");
+  const { token } = useParams();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [apiError, setApiError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ResetPasswordSchemaType>({
     resolver: zodResolver(resetPasswordSchema),
   });
 
+  const { resetPasswordMutation } = authMutation();
+
   const onSubmit = async (data: ResetPasswordSchemaType) => {
-    setApiError(null);
-
-    if (!token) {
-      setApiError("Invalid or expired reset token. Please request a new link.");
-      return;
-    }
-
-    try {
-      // API call sending the new password along with the reset token
-      await axios.post("/api/auth/reset-password", {
-        token,
-        password: data.password,
-      });
-
-      // Redirect user to login with success message
-      navigate("/login", {
-        state: { message: "Password updated successfully! Please log in." },
-      });
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        setApiError(err.response.data.message);
-      } else {
-        setApiError("Failed to reset password. Please try again.");
-      }
-    }
+    resetPasswordMutation.mutate(
+      { password: data.password, token: token! },
+      {
+        onSuccess: () => {
+          toast.success("Password reset successfully");
+          navigate("/login");
+        },
+      },
+    );
   };
 
   return (
@@ -65,9 +57,9 @@ export const ResetPasswordForm: React.FC = () => {
         </p>
       </div>
 
-      {apiError && (
+      {resetPasswordMutation.isError && (
         <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
-          {apiError}
+          {resetPasswordMutation.error.message}
         </div>
       )}
 
@@ -163,10 +155,10 @@ export const ResetPasswordForm: React.FC = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={resetPasswordMutation.isPending}
           className="w-full mt-2 py-3 px-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl shadow-md shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
         >
-          {isSubmitting ? (
+          {resetPasswordMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Resetting Password...</span>

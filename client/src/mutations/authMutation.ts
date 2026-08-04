@@ -1,5 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { loginUser, registerUser } from "../api/authApi.ts";
+import {
+  loginUser,
+  registerUser,
+  forgotPassword,
+  resetPassword,
+} from "../api/authApi.ts";
 
 export const authMutation = () => {
   const registerMutation = useMutation({
@@ -9,5 +14,18 @@ export const authMutation = () => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
   });
-  return { registerMutation, loginMutation };
+
+  const forgotPasswordMutation = useMutation({
+    mutationFn: forgotPassword,
+  });
+  const resetPasswordMutation = useMutation({
+    mutationFn: resetPassword,
+  });
+
+  return {
+    registerMutation,
+    loginMutation,
+    forgotPasswordMutation,
+    resetPasswordMutation,
+  };
 };

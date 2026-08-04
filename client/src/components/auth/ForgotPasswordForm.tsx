@@ -1,43 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Loader2, Mail } from "lucide-react";
-import axios from "axios";
 import {
   forgotPasswordSchema,
   type ForgotPasswordSchemaType,
 } from "../../schemas/forgotPasswordSchema.ts";
+import { authMutation } from "../../mutations/authMutation.ts";
+import toast from "react-hot-toast";
 
 export const ForgotPasswordForm: React.FC = () => {
-  const navigate = useNavigate();
-  const [apiError, setApiError] = useState<string | null>(null);
-
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ForgotPasswordSchemaType>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const onSubmit = async (data: ForgotPasswordSchemaType) => {
-    setApiError(null);
-    try {
-      // Send reset request endpoint
-      await axios.post("/api/auth/forgot-password", data);
+  const { forgotPasswordMutation } = authMutation();
 
-      // Redirect to confirmation page or login with a success prompt
-      navigate("/login", {
-        state: { message: "Password reset link sent to your email." },
-      });
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err) && err.response?.data?.message) {
-        setApiError(err.response.data.message);
-      } else {
-        setApiError("Something went wrong. Please try again later.");
-      }
-    }
+  const onSubmit = async (data: ForgotPasswordSchemaType) => {
+    forgotPasswordMutation.mutate(data, {
+      onSuccess: () => {
+        toast.success("Reset link send successfully");
+      },
+    });
   };
 
   return (
@@ -51,9 +40,9 @@ export const ForgotPasswordForm: React.FC = () => {
         </p>
       </div>
 
-      {apiError && (
+      {forgotPasswordMutation.isError && (
         <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
-          {apiError}
+          {forgotPasswordMutation.error.message}
         </div>
       )}
 
@@ -91,10 +80,10 @@ export const ForgotPasswordForm: React.FC = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={forgotPasswordMutation.isPending}
           className="w-full mt-2 py-3 px-4 bg-primary hover:bg-primary-hover text-white font-medium rounded-xl shadow-md shadow-primary/20 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm"
         >
-          {isSubmitting ? (
+          {forgotPasswordMutation.isPending ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               <span>Sending Link...</span>
