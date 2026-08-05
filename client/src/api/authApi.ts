@@ -3,7 +3,6 @@ import type { RegisterSchemaType } from "../schemas/registerSchema.ts";
 import axiosInstance from "./axiosInstance.ts";
 import type { LoginSchemaType } from "../schemas/loginSchema.ts";
 import type { ForgotPasswordSchemaType } from "../schemas/forgotPasswordSchema.ts";
-import type { ResetPasswordSchemaType } from "../schemas/resetPasswordSchema.ts";
 
 export const registerUser = async (data: RegisterSchemaType) => {
   try {

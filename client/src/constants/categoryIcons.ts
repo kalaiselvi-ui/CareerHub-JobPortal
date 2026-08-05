@@ -1,0 +1,36 @@
+import {
+  Code2,
+  Wallet,
+  HeartPulse,
+  Megaphone,
+  Users,
+  HardHat,
+  Palette,
+  BriefcaseBusiness,
+  GraduationCap,
+  Scale,
+  Headphones,
+  ShoppingCart,
+  Truck,
+  Hotel,
+  Newspaper,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+
+export const categoryIcons: Record<string, LucideIcon> = {
+  "information-technology": Code2,
+  "finance-accounting": Wallet,
+  "healthcare-medical": HeartPulse,
+  "marketing-sales": Megaphone,
+  "human-resources": Users,
+  "engineering-construction": HardHat,
+  "design-creative": Palette,
+  "business-management": BriefcaseBusiness,
+  "education-training": GraduationCap,
+  "legal-compliance": Scale,
+  "customer-service": Headphones,
+  "retail-e-commerce": ShoppingCart,
+  "logistics-supply-chain": Truck,
+  "hospitality-tourism": Hotel,
+  "media-communications": Newspaper,
+};

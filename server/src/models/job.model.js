@@ -10,13 +10,19 @@ const jobSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true, // Optional: set to true if every job must have a category
+    },
     company: {
       type: String,
       required: true,
+      trim: true,
     },
-    location: String,
-    salary: Number,
-    skills: [String],
+    location: { type: String, trim: true },
+    salary: { type: Number, min: 0 },
+    skills: [{ type: String, trim: true }],
     jobType: {
       type: String,
       enum: ["full-time", "part-time", "contract"],
@@ -25,6 +31,7 @@ const jobSchema = new mongoose.Schema(
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
   },
   { timestamps: true },

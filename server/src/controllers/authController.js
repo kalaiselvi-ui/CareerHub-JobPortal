@@ -15,11 +15,11 @@ export const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exist" });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
       fullName,
       email,
-      password: hashedPassword,
+      password,
       role,
     });
     const token = jwt.sign(
@@ -61,6 +61,7 @@ export const login = async (req, res) => {
       });
     }
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: "Email & password mismatch" });
     }

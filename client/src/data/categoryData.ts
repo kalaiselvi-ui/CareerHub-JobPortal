@@ -1,0 +1,92 @@
+export const categories = [
+  {
+    id: "1",
+    name: "Information Technology",
+    slug: "information-technology",
+    availableJobs: 124,
+  },
+  {
+    id: "2",
+    name: "Finance & Accounting",
+    slug: "finance-accounting",
+    availableJobs: 86,
+  },
+  {
+    id: "3",
+    name: "Healthcare & Medical",
+    slug: "healthcare-medical",
+    availableJobs: 73,
+  },
+  {
+    id: "4",
+    name: "Marketing & Sales",
+    slug: "marketing-sales",
+    availableJobs: 92,
+  },
+  {
+    id: "5",
+    name: "Human Resources",
+    slug: "human-resources",
+    availableJobs: 45,
+  },
+  {
+    id: "6",
+    name: "Engineering & Construction",
+    slug: "engineering-construction",
+    availableJobs: 68,
+  },
+  {
+    id: "7",
+    name: "Design & Creative",
+    slug: "design-creative",
+    availableJobs: 51,
+  },
+  {
+    id: "8",
+    name: "Business & Management",
+    slug: "business-management",
+    availableJobs: 77,
+  },
+  {
+    id: "9",
+    name: "Education & Training",
+    slug: "education-training",
+    availableJobs: 39,
+  },
+  {
+    id: "10",
+    name: "Legal & Compliance",
+    slug: "legal-compliance",
+    availableJobs: 28,
+  },
+  {
+    id: "11",
+    name: "Customer Service",
+    slug: "customer-service",
+    availableJobs: 64,
+  },
+  {
+    id: "12",
+    name: "Retail & E-commerce",
+    slug: "retail-e-commerce",
+    availableJobs: 58,
+  },
+  {
+    id: "13",
+    name: "Logistics & Supply Chain",
+    slug: "logistics-supply-chain",
+    availableJobs: 47,
+  },
+  {
+    id: "14",
+    name: "Hospitality & Tourism",
+    slug: "hospitality-tourism",
+    availableJobs: 35,
+  },
+  {
+    id: "15",
+    name: "Media & Communications",
+    slug: "media-communications",
+    availableJobs: 31,
+  },
+];
