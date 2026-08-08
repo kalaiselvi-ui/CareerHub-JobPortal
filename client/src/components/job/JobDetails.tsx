@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
+import { formatDeadline } from "../../utils/formatDeadline.ts";
 
 interface JobDetailsProps {
   job: DetailedJob | null;
@@ -75,15 +76,24 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
             </span>
           </div>
           <div className="flex items-center gap-1.5 bg-surface-light px-3 py-1.5 rounded-lg border border-border-subtle">
-            <span>{job.salary}</span>
+            <span>
+              {" "}
+              {job.salary.currency} {job.salary.min.toLocaleString()} -{" "}
+              {job.salary.max.toLocaleString()} / {job.salary.period}
+            </span>
           </div>
           <div className="flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1.5 rounded-lg font-semibold">
             <Briefcase className="w-4 h-4" />
-            <span>{job.type}</span>
+            <span>{job.jobType}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-surface-dark/50 ml-auto">
             <Clock className="w-3.5 h-3.5" />
-            <span>Posted {formatPostedDate(job?.postedDate)}</span>
+            <span>Posted {formatPostedDate(job?.createdAt)}</span>
+
+            <span>
+              {" "}
+              Apply before {formatDeadline(job?.applicationDeadline)}
+            </span>
           </div>
         </div>
 
@@ -160,7 +170,9 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs sm:text-sm">
           <div>
             <p className="text-surface-dark/50 font-medium">Employment Type</p>
-            <p className="font-semibold text-surface-dark mt-0.5">{job.type}</p>
+            <p className="font-semibold text-surface-dark mt-0.5">
+              {job.jobType}
+            </p>
           </div>
           <div>
             <p className="text-surface-dark/50 font-medium">Experience Level</p>
@@ -183,7 +195,9 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
           <div className="col-span-2">
             <p className="text-surface-dark/50 font-medium">Salary Range</p>
             <p className="font-semibold text-surface-dark mt-0.5">
-              {job.salary}
+              {" "}
+              {job.salary.currency} {job.salary.min.toLocaleString()} -{" "}
+              {job.salary.max.toLocaleString()} / {job.salary.period}{" "}
             </p>
           </div>
         </div>

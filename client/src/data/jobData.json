@@ -1,0 +1,471 @@
+[
+  {
+    "title": "Senior Full Stack Engineer",
+    "company": "Emirates Tech Ventures",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Dubai, UAE",
+    "salary": "AED 25,000 - 32,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-27T10:00:00Z" },
+    "applicationDeadline": { "$date": "2026-08-30T23:59:59Z" },
+    "status": "active",
+    "skills": ["React", "Node.js", "TypeScript", "AWS", "PostgreSQL"],
+    "description": "Architect scale enterprise fintech web applications for Middle Eastern digital payments.",
+    "responsibilities": [
+      "Design scalable frontend interfaces in React and TypeScript.",
+      "Build secure financial payment microservices in Node.js.",
+      "Optimize PostgreSQL query performance and execution plans."
+    ],
+    "requirements": [
+      "5+ years full stack engineering experience",
+      "Hands-on expertise in React, Node.js, and AWS",
+      "Prior exposure to payment gateway or fintech systems"
+    ],
+    "aboutCompany": "Emirates Tech Ventures builds financial software across the GCC region."
+  },
+  {
+    "title": "AI Solutions Architect",
+    "company": "Dubai AI Labs",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Dubai, UAE",
+    "salary": "AED 35,000 - 45,000 / mo",
+    "type": "Full Time",
+    "workMode": "On-site",
+    "experienceLevel": "Executive Level",
+    "postedDate": { "$date": "2026-07-28T08:30:00Z" },
+    "applicationDeadline": { "$date": "2026-08-28T23:59:59Z" },
+    "status": "active",
+    "skills": ["Python", "PyTorch", "LLMs", "Azure AI", "LangChain"],
+    "description": "Lead AI automation initiatives and custom LLM deployments for smart city projects.",
+    "responsibilities": [
+      "Architect generative AI and LLM agents for government portals.",
+      "Lead a team of machine learning research engineers.",
+      "Ensure AI deployments follow local data compliance frameworks."
+    ],
+    "requirements": [
+      "7+ years in machine learning and cloud system design",
+      "Proven track record deploying LLMs into production",
+      "Master's degree in CS or AI preferred"
+    ],
+    "aboutCompany": "Dubai AI Labs powers smart digital government initiatives."
+  },
+  {
+    "title": "Digital Marketing Specialist",
+    "company": "Gulf Retail Digital",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b32",
+    "location": "Dubai, UAE",
+    "salary": "AED 14,000 - 18,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-07-25T14:20:00Z" },
+    "applicationDeadline": { "$date": "2026-08-25T23:59:59Z" },
+    "status": "active",
+    "skills": ["Google Ads", "Meta Ads", "SEO", "Google Analytics 4"],
+    "description": "Drive e-commerce customer acquisition across Middle East and North Africa channels.",
+    "responsibilities": [
+      "Manage paid campaign budgets on Google, Meta, and TikTok.",
+      "Optimize landing page conversions and localized Arabic/English ad copy.",
+      "Report monthly ROI metrics using GA4."
+    ],
+    "requirements": [
+      "3+ years performance marketing experience in the GCC market",
+      "Bilingual in English and Arabic preferred",
+      "Strong analytical skills with Google Analytics 4"
+    ],
+    "aboutCompany": "Gulf Retail Digital scales luxury e-commerce brands across the Middle East."
+  },
+  {
+    "title": "Human Resources Business Partner",
+    "company": "Aviation Global Hub",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "Human Resources",
+    "location": "Dubai, UAE",
+    "salary": "AED 22,000 - 28,000 / mo",
+    "type": "Full Time",
+    "workMode": "On-site",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-24T11:00:00Z" },
+    "applicationDeadline": { "$date": "2026-08-24T23:59:59Z" },
+    "status": "draft",
+    "skills": [
+      "Talent Acquisition",
+      "UAE Labor Law",
+      "Employee Relations",
+      "HRIS"
+    ],
+    "description": "Oversee talent acquisition and employee relations for international aviation teams.",
+    "responsibilities": [
+      "Guide executive recruitment across global offices.",
+      "Ensure full compliance with UAE labor laws and visa processes.",
+      "Manage employee engagement and performance review programs."
+    ],
+    "requirements": [
+      "6+ years in corporate HR leadership",
+      "In-depth knowledge of UAE Labor Law",
+      "SHRM-SCP certification preferred"
+    ],
+    "aboutCompany": "Aviation Global Hub manages logistics and airline services in the MENA region."
+  },
+  {
+    "title": "DevOps & Cloud Engineer",
+    "company": "DesertCloud Technologies",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Abu Dhabi, UAE",
+    "salary": "AED 28,000 - 35,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-07-26T09:15:00Z" },
+    "applicationDeadline": { "$date": "2026-08-31T23:59:59Z" },
+    "status": "active",
+    "skills": ["Kubernetes", "Terraform", "AWS", "Docker", "CI/CD"],
+    "description": "Manage sovereign cloud infrastructure and automated CI/CD deployment pipelines.",
+    "responsibilities": [
+      "Maintain Kubernetes clusters across multi-region cloud setups.",
+      "Automate infrastructure provisioning using Terraform.",
+      "Ensure system uptime and security incident monitoring."
+    ],
+    "requirements": [
+      "4+ years experience in cloud infrastructure / DevOps",
+      "AWS or Azure Cloud Architect certification",
+      "Strong Bash and Python scripting skills"
+    ],
+    "aboutCompany": "DesertCloud Technologies provides high-security cloud services."
+  },
+  {
+    "title": "UI/UX Product Designer",
+    "company": "Oasis Mobile App Studio",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Dubai, UAE",
+    "salary": "AED 18,000 - 24,000 / mo",
+    "type": "Full Time",
+    "workMode": "Remote",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-07-23T16:45:00Z" },
+    "applicationDeadline": { "$date": "2026-08-20T23:59:59Z" },
+    "status": "active",
+    "skills": ["Figma", "User Research", "Wireframing", "Design Systems"],
+    "description": "Design mobile app interactions for ride-sharing and delivery products in UAE.",
+    "responsibilities": [
+      "Create high-fidelity mobile prototypes and wireframes in Figma.",
+      "Conduct user research interviews in English and Arabic.",
+      "Maintain component libraries and design tokens."
+    ],
+    "requirements": [
+      "3+ years experience designing mobile products",
+      "Strong portfolio demonstrating mobile app UI workflows",
+      "Proficiency in Figma and interactive prototyping"
+    ],
+    "aboutCompany": "Oasis Mobile App Studio designs top consumer apps in the GCC."
+  },
+  {
+    "title": "Senior React Developer",
+    "company": "InfoTech India",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Bangalore, India",
+    "salary": "₹18,000,000 - ₹24,000,000 / yr",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-28T06:00:00Z" },
+    "applicationDeadline": { "$date": "2026-09-01T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "React",
+      "TypeScript",
+      "Redux Toolkit",
+      "Next.js",
+      "Tailwind CSS"
+    ],
+    "description": "Build high-speed SaaS frontend dashboards for enterprise clients worldwide.",
+    "responsibilities": [
+      "Architect micro-frontend web platforms in React.",
+      "Optimize web application performance and bundle sizes.",
+      "Guide junior engineers through code reviews."
+    ],
+    "requirements": [
+      "5+ years frontend web engineering experience",
+      "Deep expertise in React 18, Next.js, and TypeScript",
+      "Strong understanding of modern web performance standards"
+    ],
+    "aboutCompany": "InfoTech India builds software solutions for global enterprise clients."
+  },
+  {
+    "title": "Senior Product Manager",
+    "company": "Empire Cloud Inc",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "New York, USA",
+    "salary": "$150,000 - $185,000 / yr",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-27T11:20:00Z" },
+    "applicationDeadline": { "$date": "2026-08-30T23:59:59Z" },
+    "status": "active",
+    "skills": ["Product Roadmap", "B2B SaaS", "Agile", "User Analytics"],
+    "description": "Drive product strategy and execution for B2B financial SaaS platforms.",
+    "responsibilities": [
+      "Define 12-month product roadmaps and release priorities.",
+      "Partner with engineering, design, and sales leadership.",
+      "Track adoption metrics and conversion funnels."
+    ],
+    "requirements": [
+      "5+ years product management experience in B2B SaaS",
+      "Strong data-driven decision making mindset",
+      "Excellent executive presentation skills"
+    ],
+    "aboutCompany": "Empire Cloud Inc powers financial enterprise management tools."
+  },
+  {
+    "title": "Lead Frontend Engineer",
+    "company": "London Financial Tech",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "London, UK",
+    "salary": "£75,000 - £95,000 / yr",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-28T09:00:00Z" },
+    "applicationDeadline": { "$date": "2026-08-15T23:59:59Z" },
+    "status": "closed",
+    "skills": ["React", "TypeScript", "Next.js", "GraphQL", "Tailwind CSS"],
+    "description": "Lead frontend architecture for international banking portals.",
+    "responsibilities": [
+      "Build high-performance web components in Next.js.",
+      "Integrate GraphQL API query layers.",
+      "Maintain strict web accessibility (WCAG) compliance."
+    ],
+    "requirements": [
+      "5+ years frontend web engineering leadership",
+      "Expertise in React, TypeScript, and modern CSS",
+      "Experience with financial regulatory UI requirements"
+    ],
+    "aboutCompany": "London Financial Tech builds banking platforms."
+  },
+  {
+    "title": "Senior Backend Golang Engineer",
+    "company": "Singapore FinTech Global",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2b",
+    "location": "Singapore",
+    "salary": "SGD 9,000 - 12,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-07-28T05:15:00Z" },
+    "applicationDeadline": { "$date": "2026-08-28T23:59:59Z" },
+    "status": "active",
+    "skills": ["Go", "gRPC", "Microservices", "PostgreSQL", "Docker"],
+    "description": "Build ultra-low latency transaction APIs for Southeast Asian currency exchanges.",
+    "responsibilities": [
+      "Develop high-concurrency microservices in Go.",
+      "Design gRPC internal communication layers.",
+      "Optimize SQL query execution speeds."
+    ],
+    "requirements": [
+      "4+ years backend engineering experience using Golang",
+      "Deep understanding of concurrent programming and microservices",
+      "Prior exposure to financial trading systems"
+    ],
+    "aboutCompany": "Singapore FinTech Global powers digital currency transactions."
+  },
+  {
+    "title": "Registered Nurse - ICU",
+    "company": "Dubai Healthcare City Hospital",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2d",
+    "location": "Dubai, UAE",
+    "salary": "AED 16,000 - 22,000 / mo",
+    "type": "Full Time",
+    "workMode": "On-site",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-08-01T08:00:00Z" },
+    "applicationDeadline": { "$date": "2026-09-01T23:59:59Z" },
+    "status": "active",
+    "skills": ["Patient Care", "Critical Care", "DHA License", "BLS/ACLS"],
+    "description": "Provide high-quality intensive care nursing to patients in a state-of-the-art facility.",
+    "responsibilities": [
+      "Monitor critical patient vitals and administer medications.",
+      "Collaborate with multidisciplinary medical teams during emergencies.",
+      "Maintain accurate patient care documentation."
+    ],
+    "requirements": [
+      "Bachelor of Science in Nursing (BSN)",
+      "Valid DHA / MOH license or eligibility letter",
+      "3+ years experience in ICU or critical care settings"
+    ],
+    "aboutCompany": "Dubai Healthcare City Hospital is a leading multi-specialty medical center."
+  },
+  {
+    "title": "High School STEM Teacher",
+    "company": "Emirates International Academy",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b33",
+    "location": "Abu Dhabi, UAE",
+    "salary": "AED 15,000 - 19,000 / mo",
+    "type": "Full Time",
+    "workMode": "On-site",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-08-02T09:30:00Z" },
+    "applicationDeadline": { "$date": "2026-08-30T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "Physics",
+      "Mathematics",
+      "Curriculum Design",
+      "Classroom Management"
+    ],
+    "description": "Deliver engaging STEM curriculum for high school students following IB/British standards.",
+    "responsibilities": [
+      "Plan interactive lesson plans and lab experiments.",
+      "Assess student performance and provide constructive feedback.",
+      "Participate in parent-teacher conferences and extracurricular mentoring."
+    ],
+    "requirements": [
+      "Bachelor's degree in Education or relevant STEM subject",
+      "Teaching credential / license (PGCE or equivalent)",
+      "2+ years experience teaching high school curricula"
+    ],
+    "aboutCompany": "Emirates International Academy is a top-tier private educational institution."
+  },
+  {
+    "title": "Corporate Communications Manager",
+    "company": "Arabian Media Network",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b39",
+    "location": "Dubai, UAE",
+    "salary": "AED 24,000 - 30,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-08-03T11:00:00Z" },
+    "applicationDeadline": { "$date": "2026-09-05T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "Public Relations",
+      "Media Relations",
+      "Crisis Communication",
+      "Content Strategy"
+    ],
+    "description": "Lead media relations, corporate announcements, and internal communications strategies.",
+    "responsibilities": [
+      "Draft press releases, executive speeches, and media briefs.",
+      "Maintain relationships with major GCC journalists and news outlets.",
+      "Manage crisis communications and brand reputation."
+    ],
+    "requirements": [
+      "5+ years in corporate PR or media management",
+      "Fluent in both written and spoken Arabic and English",
+      "Degree in Journalism, Public Relations, or Mass Communication"
+    ],
+    "aboutCompany": "Arabian Media Network is a premier broadcasting and digital media agency."
+  },
+  {
+    "title": "Financial Analyst - Corporate Finance",
+    "company": "Gulf Horizon Capital",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2c",
+    "location": "Dubai, UAE",
+    "salary": "AED 20,000 - 26,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-08-04T10:15:00Z" },
+    "applicationDeadline": { "$date": "2026-09-02T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "Financial Modeling",
+      "Valuation",
+      "Excel",
+      "Forecasting",
+      "FP&A"
+    ],
+    "description": "Conduct investment evaluations, financial modeling, and quarterly performance reporting.",
+    "responsibilities": [
+      "Build dynamic financial models for investment appraisal.",
+      "Prepare monthly financial analysis for executive management.",
+      "Monitor market trends and GCC macroeconomic metrics."
+    ],
+    "requirements": [
+      "Bachelor’s degree in Finance, Economics, or Accounting",
+      "CFA candidate or charterholder preferred",
+      "3+ years experience in corporate finance or investment banking"
+    ],
+    "aboutCompany": "Gulf Horizon Capital manages diversified investment portfolios across the GCC."
+  },
+  {
+    "title": "Brand Marketing Lead",
+    "company": "Crestview FMCG Group",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b2e",
+    "location": "Dubai, UAE",
+    "salary": "AED 22,000 - 28,000 / mo",
+    "type": "Full Time",
+    "workMode": "Hybrid",
+    "experienceLevel": "Senior Level",
+    "postedDate": { "$date": "2026-08-05T08:45:00Z" },
+    "applicationDeadline": { "$date": "2026-08-31T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "Brand Strategy",
+      "Campaign Management",
+      "Market Research",
+      "Budgeting"
+    ],
+    "description": "Drive brand strategy, product launches, and retail activation across consumer product lines.",
+    "responsibilities": [
+      "Develop 360-degree omnichannel marketing campaigns.",
+      "Manage agency partners for PR, creative design, and media buying.",
+      "Analyze consumer insights and sales performance to optimize campaign ROI."
+    ],
+    "requirements": [
+      "5+ years brand marketing experience in FMCG or consumer goods",
+      "Proven track record managing multi-channel product launches",
+      "Strong leadership and budget management skills"
+    ],
+    "aboutCompany": "Crestview FMCG Group distributes top-tier consumer products across MENA."
+  },
+  {
+    "title": "Customer Success & Operations Manager",
+    "company": "AeroLink Logistics",
+    "companyLogo": "https://via.placeholder.com/150",
+    "category": "6a72f59f7aac0072a3827b35",
+    "location": "Dubai, UAE",
+    "salary": "AED 16,000 - 21,000 / mo",
+    "type": "Full Time",
+    "workMode": "On-site",
+    "experienceLevel": "Mid Level",
+    "postedDate": { "$date": "2026-08-06T12:00:00Z" },
+    "applicationDeadline": { "$date": "2026-09-10T23:59:59Z" },
+    "status": "active",
+    "skills": [
+      "Customer Experience",
+      "Zendesk",
+      "SLA Management",
+      "Team Leadership"
+    ],
+    "description": "Lead the regional customer support operations team ensuring high satisfaction and fast resolution.",
+    "responsibilities": [
+      "Oversee daily operations of the omnichannel customer support team.",
+      "Monitor response times, resolution rates, and CSAT scores.",
+      "Implement support workflows and train new 6a72f59f7aac0072a3827b35 representatives."
+    ],
+    "requirements": [
+      "4+ years in 6a72f59f7aac0072a3827b35 or support operations",
+      "Proficiency in Zendesk, Salesforce Service Cloud, or similar ticketing systems",
+      "Excellent communication skills in English (Arabic is a plus)"
+    ],
+    "aboutCompany": "AeroLink Logistics provides regional freight, courier, and supply chain solutions."
+  }
+]

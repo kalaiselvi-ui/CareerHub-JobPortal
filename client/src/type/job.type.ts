@@ -1,13 +1,20 @@
 export interface JobProps {
-  id: string;
+  _id: string;
   title: string;
   company: string;
   location: string;
-  salary: string;
-  type: string;
+  jobType: string;
   skills: string[];
-  postedDate: string;
-  logoUrl?: string;
+  companyLogo?: string;
+  applicationDeadline: string;
+  status: "active" | "closed" | "draft";
+  createdAt: string;
+  salary: {
+    currency: string;
+    min: number;
+    max: number;
+    period: "month" | "year";
+  };
 }
 
 // Extended interface with full details for JobDetails component

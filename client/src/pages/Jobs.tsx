@@ -4,19 +4,18 @@ import TopFilters from "../components/job/TopFilters.tsx";
 import JobList from "../components/job/JobList.tsx";
 import JobDetails from "../components/job/JobDetails.tsx";
 import type { DetailedJob } from "../type/job.type.ts";
-import JobData from "../data/jobData.ts";
+import { useJobs } from "../hooks/useJob.ts";
 
 export const JobsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const [jobs] = useState<DetailedJob[]>(JobData);
   const [selectedJob, setSelectedJob] = useState<DetailedJob | null>(null);
   const [showMobileDetails, setShowMobileDetails] = useState<boolean>(false);
-
+  const { data: jobs = [], isLoading, isError } = useJobs();
+  console.log(jobs);
   useEffect(() => {
     if (id) {
-      const foundJob = jobs.find((j) => j.id === id);
+      const foundJob = jobs.find((j) => j._id === id);
       if (foundJob) {
         setSelectedJob(foundJob);
       } else {
@@ -27,10 +26,18 @@ export const JobsPage: React.FC = () => {
     }
   }, [id, jobs]);
 
+  if (isLoading) {
+    return <div>Loading jobs...</div>;
+  }
+
+  if (isError) {
+    return <div>Failed to load jobs.</div>;
+  }
+
   const handleSelectJob = (job: DetailedJob) => {
     setSelectedJob(job);
     setShowMobileDetails(true);
-    navigate(`/jobs/${job.id}`);
+    navigate(`/jobs/${job._id}`);
   };
 
   return (
@@ -57,7 +64,7 @@ export const JobsPage: React.FC = () => {
             <div className="w-full lg:flex-1 lg:overflow-y-auto pr-1 scrollbar-thin">
               <JobList
                 jobs={jobs}
-                selectedJobId={selectedJob?.id || null}
+                selectedJobId={selectedJob?._id || null}
                 onSelectJob={handleSelectJob}
               />
             </div>

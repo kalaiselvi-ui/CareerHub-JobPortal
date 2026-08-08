@@ -20,13 +20,65 @@ const jobSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    companyLogo: {
+      type: String,
+    },
     location: { type: String, trim: true },
-    salary: { type: Number, min: 0 },
+    salary: {
+      currency: {
+        type: String,
+        enum: ["AED", "USD", "EUR", "GBP", "INR", "SGD"],
+        default: "AED",
+        required: true,
+      },
+      min: {
+        type: Number,
+        required: true,
+      },
+      max: {
+        type: Number,
+        required: true,
+      },
+      period: {
+        type: String,
+        enum: ["month", "year"],
+        required: true,
+      },
+    },
     skills: [{ type: String, trim: true }],
     jobType: {
       type: String,
       enum: ["full-time", "part-time", "contract"],
       default: "full-time",
+    },
+    applicationDeadline: {
+      type: Date,
+    },
+    status: {
+      type: String,
+      enum: ["active", "closed", "draft"],
+      default: "active",
+    },
+    workMode: {
+      type: String,
+      enum: ["Remote", "Hybrid", "On-site"],
+    },
+
+    experienceLevel: {
+      type: String,
+      enum: ["Entry Level", "Mid Level", "Senior Level"],
+    },
+
+    responsibilities: {
+      type: [String],
+    },
+
+    requirements: {
+      type: [String],
+    },
+
+    aboutCompany: {
+      type: String,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,

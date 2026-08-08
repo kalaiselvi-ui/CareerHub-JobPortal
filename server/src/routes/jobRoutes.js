@@ -8,10 +8,16 @@ import {
   updateJob,
 } from "../controllers/jobController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
+import { uploadImage } from "../middleware/uploadImage.js";
 
 const jobRoutes = express.Router();
 
-jobRoutes.post("/", authMiddleware, createJob);
+jobRoutes.post(
+  "/",
+  authMiddleware,
+  uploadImage.single("companyLogo"),
+  createJob,
+);
 jobRoutes.get("/", getAllJob);
 // 2. Specific Named Routes (MUST come before dynamic :id routes)
 jobRoutes.get("/my-jobs", authMiddleware, getMyJobs);

@@ -6,7 +6,7 @@ import {
   getApplicantsForJob,
   updateStatus,
 } from "../controllers/applicationController.js";
-import { uploadResume } from "../middleware/uploadMiddleware.js";
+import { uploadResume } from "../middleware/uploadResume.js";
 
 const applicationRoutes = express.Router();
 

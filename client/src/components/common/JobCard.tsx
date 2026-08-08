@@ -11,7 +11,7 @@ interface JobCardComponentProps {
 
 const JobCard = ({ job, isSelected, onClick }: JobCardComponentProps) => {
   return (
-    <Link to={`/jobs/${job.id}`}>
+    <Link to={`/jobs/${job._id}`}>
       <div
         onClick={onClick}
         className={`group cursor-pointer bg-white rounded-xl p-6 transition-all duration-200 flex flex-col justify-between ${
@@ -38,10 +38,10 @@ const JobCard = ({ job, isSelected, onClick }: JobCardComponentProps) => {
 
             {/* Right side container: Posted date & Bookmark button */}
             <div className="flex items-center gap-2 shrink-0">
-              {job.postedDate && (
+              {job.createdAt && (
                 <span className="flex items-center gap-1 text-xs font-medium text-surface-dark/50">
                   <Clock className="w-3 h-3 text-surface-dark/40" />
-                  {formatPostedDate(job.postedDate)}
+                  {formatPostedDate(job.applicationDeadline)}
                 </span>
               )}
               <button
@@ -65,11 +65,15 @@ const JobCard = ({ job, isSelected, onClick }: JobCardComponentProps) => {
               </div>
               <div className="flex items-center gap-1.5 bg-primary/10 text-primary px-2.5 py-1 rounded-md font-semibold">
                 <Briefcase className="w-3.5 h-3.5" />
-                <span>{job.type}</span>
+                <span>{job.jobType}</span>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 bg-surface-light px-2.5 py-1 rounded-md border border-border-subtle">
-              <span>{job.salary}</span>
+            <div className="flex items-center gap-1.5 bg-surface-light px-2.5 py-1 rounded-md border border-border-subtle shrink-0">
+              <span className="whitespace-nowrap">
+                {" "}
+                {job.salary.currency} {job.salary.min.toLocaleString()} -{" "}
+                {job.salary.max.toLocaleString()} / {job.salary.period}
+              </span>
             </div>
           </div>
 

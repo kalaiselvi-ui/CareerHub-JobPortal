@@ -6,7 +6,6 @@ import axiosInstance from "./axiosInstance.ts";
 
 export const getCategories = async (): Promise<CategoryResponse> => {
   const response = await axiosInstance.get("/api/category/");
-  console.log(response.data);
   return response.data;
 };
 

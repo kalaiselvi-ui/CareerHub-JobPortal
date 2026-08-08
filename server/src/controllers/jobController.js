@@ -2,24 +2,61 @@ import Job from "../models/job.model.js";
 
 export const createJob = async (req, res) => {
   try {
-    const { title, description, company, location, salary, skills, jobType } =
-      req.body;
+    const {
+      title,
+      description,
+      company,
+      location,
+      salary,
+      skills,
+      jobType,
+      experienceLevel,
+      workMode,
+      applicationDeadline,
+      status,
+    } = req.body;
     const { id, role } = req.user;
-    if (!title || !description || !company || !location || !skills) {
+    if (
+      !title ||
+      !description ||
+      !company ||
+      !location ||
+      !skills ||
+      !salary?.currency ||
+      salary?.min == null ||
+      salary?.max == null ||
+      !salary?.period
+    ) {
       return res
         .status(400)
         .json({ success: false, message: "Required Fields" });
     }
+
     if (role !== "recruiter") {
       return res.status(403).json({
         success: false,
         message: "Only recruiters can create jobs",
       });
     }
+    const companyLogo = req.file
+      ? await uploadImageToCloudinary(req.file.buffer)
+      : null;
     const job = await Job.create({
-      ...req.body,
+      title,
+      description,
+      company,
+      location,
+      salary,
+      skills,
+      jobType,
+      applicationDeadline,
+      status,
+      workMode,
+      experienceLevel,
+      companyLogo: companyLogo?.secure_url,
       createdBy: id,
     });
+
     return res.status(201).json({
       success: true,
       message: "New Job Created Successfully",
@@ -39,6 +76,7 @@ export const getAllJob = async (req, res) => {
     if (!jobs) {
       return res.status(404).json({ message: "Job not found" });
     }
+
     return res
       .status(200)
       .json({ message: "Successfully fetched all jobs", data: jobs });
@@ -57,6 +95,7 @@ export const getJobById = async (req, res) => {
     if (!job) {
       return res.status(404).json({ message: "Job not found" });
     }
+
     return res
       .status(200)
       .json({ success: true, message: "got the jobs by id", data: job });
@@ -70,8 +109,19 @@ export const getJobById = async (req, res) => {
 
 export const updateJob = async (req, res) => {
   try {
-    const { title, description, company, location, salary, skills, jobType } =
-      req.body;
+    const {
+      title,
+      description,
+      company,
+      location,
+      salary,
+      skills,
+      jobType,
+      experienceLevel,
+      workMode,
+      applicationDeadline,
+      status,
+    } = req.body;
 
     const { id: userId, role } = req.user;
     if (role !== "recruiter") {
@@ -96,7 +146,11 @@ export const updateJob = async (req, res) => {
     job.location = location ?? job.location;
     job.salary = salary ?? job.salary;
     job.skills = skills ?? job.skills;
+    job.status = status ?? job.status;
+    job.applicationDeadline = applicationDeadline ?? job.applicationDeadline;
     job.jobType = jobType ?? job.jobType;
+    job.experienceLevel = experienceLevel ?? job.experienceLevel;
+    job.workMode = workMode ?? job.workMode;
 
     await job.save();
     return res

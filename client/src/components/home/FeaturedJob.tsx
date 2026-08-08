@@ -1,9 +1,19 @@
 import React from "react";
 import { ArrowRight } from "lucide-react";
 import JobCard from "../common/JobCard.tsx";
-import JobData from "../../data/jobData.ts";
+import { useJobs } from "../../hooks/useJob.ts";
 
 export const FeaturedJobs: React.FC = () => {
+  const { data, isLoading, isError } = useJobs();
+
+  if (isLoading) {
+    return <div>Loading jobs...</div>;
+  }
+
+  if (isError) {
+    return <div>Failed to load jobs.</div>;
+  }
+
   return (
     <section className="bg-white py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-12">
@@ -17,8 +27,8 @@ export const FeaturedJobs: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {JobData?.map((job) => (
-            <JobCard key={job.id} job={job} />
+          {data?.map((job) => (
+            <JobCard key={job._id} job={job} />
           ))}
         </div>
 
