@@ -1,13 +1,18 @@
+export type JobStatus = "active" | "draft" | "closed";
+export type JobType = "full-time" | "part-time" | "contract";
+export type WorkMode = "on-site" | "remote" | "hybrid";
+export type ExperienceLevel = "entry level" | "mid level" | "senior level";
+
 export interface JobProps {
   _id: string;
   title: string;
   company: string;
   location: string;
-  jobType: string;
+  jobType: JobType | string;
   skills: string[];
   companyLogo?: string;
   applicationDeadline: string;
-  status: "active" | "closed" | "draft";
+  status: JobStatus;
   createdAt: string;
   salary: {
     currency: string;
@@ -17,10 +22,9 @@ export interface JobProps {
   };
 }
 
-// Extended interface with full details for JobDetails component
 export interface DetailedJob extends JobProps {
-  workMode: "Remote" | "Hybrid" | "On-site" | string;
-  experienceLevel: "Entry Level" | "Mid Level" | "Senior Level" | string;
+  workMode: WorkMode | string;
+  experienceLevel: ExperienceLevel | string;
   description: string;
   responsibilities: string[];
   requirements: string[];

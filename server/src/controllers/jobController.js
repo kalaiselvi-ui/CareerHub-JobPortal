@@ -10,6 +10,7 @@ export const createJob = async (req, res) => {
       salary,
       skills,
       jobType,
+      category,
       experienceLevel,
       workMode,
       applicationDeadline,
@@ -32,12 +33,6 @@ export const createJob = async (req, res) => {
         .json({ success: false, message: "Required Fields" });
     }
 
-    if (role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can create jobs",
-      });
-    }
     const companyLogo = req.file
       ? await uploadImageToCloudinary(req.file.buffer)
       : null;
@@ -51,6 +46,7 @@ export const createJob = async (req, res) => {
       jobType,
       applicationDeadline,
       status,
+      category,
       workMode,
       experienceLevel,
       companyLogo: companyLogo?.secure_url,
@@ -124,12 +120,7 @@ export const updateJob = async (req, res) => {
     } = req.body;
 
     const { id: userId, role } = req.user;
-    if (role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can update jobs",
-      });
-    }
+
     const { id: jobId } = req.params;
     const job = await Job.findById(jobId);
     if (!job) {

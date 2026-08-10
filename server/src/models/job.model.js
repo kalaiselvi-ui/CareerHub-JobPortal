@@ -61,12 +61,12 @@ const jobSchema = new mongoose.Schema(
     },
     workMode: {
       type: String,
-      enum: ["Remote", "Hybrid", "On-site"],
+      enum: ["remote", "hybrid", "on-site"],
     },
 
     experienceLevel: {
       type: String,
-      enum: ["Entry Level", "Mid Level", "Senior Level"],
+      enum: ["entry level", "mid level", "senior level"],
     },
 
     responsibilities: {

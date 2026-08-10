@@ -8,6 +8,10 @@ import ForgotPassword from "./pages/auth/ForgotPassword.tsx";
 import ResetPassword from "./pages/auth/ResetPassword.tsx";
 import { Toaster } from "react-hot-toast";
 import GuestRoute from "./components/routes/GuestRoute.tsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
+import ProtectedRoutes from "./components/routes/ProtectedRoutes.tsx";
+import { CreateJob } from "./pages/job-management/CreateJob.tsx";
+import ManageJobs from "./pages/job-management/ManageJobs.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -34,6 +38,18 @@ const App = () => {
             </Route>
             <Route path="/companies" element={<Companies />} />
             <Route path="/about" element={<About />} />
+            <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            </Route>
+            <Route
+              element={
+                <ProtectedRoutes allowedRoles={["admin", "recruiter"]} />
+              }
+            >
+              <Route path="/jobs/manage" element={<ManageJobs />} />
+              <Route path="/jobs/create" element={<CreateJob />} />
+              {/* <Route path="/jobs/:id/edit" element={<EditJob />} /> */}
+            </Route>
 
             <Route path="*" element={<div>404 - Page Not Found</div>} />
           </Route>

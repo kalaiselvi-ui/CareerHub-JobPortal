@@ -5,12 +5,22 @@ import {
   getCategory,
 } from "../controllers/categoryController.js";
 import { authMiddleware } from "../middleware/authMiddleware.js";
-import { authorizeAdmin } from "../middleware/adminMiddleware.js";
+import { authorizeRoles } from "../middleware/adminMiddleware.js";
 
 const categoryRoutes = express.Router();
 
-categoryRoutes.post("/", authMiddleware, authorizeAdmin, createCategory);
+categoryRoutes.post(
+  "/",
+  authMiddleware,
+  authorizeRoles("admin", "recruiter"),
+  createCategory,
+);
 categoryRoutes.get("/", getCategory);
-categoryRoutes.delete("/:id", authMiddleware, authorizeAdmin, deleteCategory);
+categoryRoutes.delete(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("admin", "recruiter"),
+  deleteCategory,
+);
 
 export default categoryRoutes;
