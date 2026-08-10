@@ -22,9 +22,10 @@ import {
 import { useJobs } from "../../hooks/useJob.ts";
 import type { DetailedJob, JobProps } from "../../type/job.type.ts";
 import type { User } from "../../store/authStore.ts";
-import { formatPostedDate } from "../../utils/formatDate.ts";
-import { formatDeadline } from "../../utils/formatDeadline.ts";
 import { SummaryCard } from "../../components/SummaryCard.tsx";
+import { jobMutation } from "../../mutations/jobMutation.ts";
+import toast from "react-hot-toast";
+import { DeleteModal } from "../../components/DeleteModal.tsx";
 
 export interface FilterState {
   search: string;
@@ -59,71 +60,6 @@ const StatusBadge: React.FC<{ status: JobProps["status"] | string }> = ({
   );
 };
 
-interface DeleteModalProps {
-  isOpen: boolean;
-  jobTitle: string;
-  onClose: () => void;
-  onConfirm: () => void;
-}
-
-const DeleteModal: React.FC<DeleteModalProps> = ({
-  isOpen,
-  jobTitle,
-  onClose,
-  onConfirm,
-}) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-border-subtle space-y-4">
-        <div className="flex items-start justify-between">
-          <div className="p-3 bg-rose-100 text-rose-600 rounded-full">
-            <AlertTriangle className="w-6 h-6" />
-          </div>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-bold text-surface-dark">Delete Job?</h3>
-          <p className="text-sm text-slate-500 mt-1">
-            Are you sure you want to delete{" "}
-            <span className="font-semibold text-surface-dark">
-              "{jobTitle}"
-            </span>
-            ?
-          </p>
-          <p className="text-xs text-rose-600 mt-2 font-medium">
-            This action cannot be undone.
-          </p>
-        </div>
-
-        <div className="flex items-center justify-end gap-3 pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 border border-border-subtle text-slate-600 font-medium text-sm rounded-xl hover:bg-slate-50 transition-colors cursor-pointer"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={onConfirm}
-            className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-medium text-sm rounded-xl shadow-sm transition-colors cursor-pointer"
-          >
-            Delete Job
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // --- Main Page Component ---
 
 export const ManageJobs: React.FC = () => {
@@ -133,7 +69,8 @@ export const ManageJobs: React.FC = () => {
   const { data: rawJobs = [], isLoading, isError } = useJobs();
 
   // Local state to track visually deleted IDs prior to API hook integration
-  const [deletedIds, setDeletedIds] = useState<string[]>([]);
+  const [deletedIds] = useState<string[]>([]);
+  const { deleteMutation } = jobMutation();
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -206,11 +143,13 @@ export const ManageJobs: React.FC = () => {
   };
 
   const handleConfirmDelete = () => {
-    if (deletingJob) {
-      // Append ID to visually hide it; replace with mutateAsync() upon backend integration
-      setDeletedIds((prev) => [...prev, deletingJob._id]);
-      setDeletingJob(null);
-    }
+    if (!deletingJob) return;
+    deleteMutation.mutate(deletingJob._id, {
+      onSuccess: () => {
+        toast.success("Job Deleted Successfully");
+        setDeletingJob(null);
+      },
+    });
   };
 
   const formatDate = (dateString?: string) => {
@@ -583,7 +522,8 @@ export const ManageJobs: React.FC = () => {
       {/* Delete Confirmation Modal */}
       <DeleteModal
         isOpen={Boolean(deletingJob)}
-        jobTitle={deletingJob?.title || ""}
+        itemName={deletingJob?.title || ""}
+        itemType="Job"
         onClose={() => setDeletingJob(null)}
         onConfirm={handleConfirmDelete}
       />
@@ -592,3 +532,18 @@ export const ManageJobs: React.FC = () => {
 };
 
 export default ManageJobs;
+
+// <DeleteModal
+//   isOpen={Boolean(deletingCategory)}
+//   itemName={deletingCategory?.name || ""}
+//   itemType="Category"
+//   onClose={() => setDeletingCategory(null)}
+//   onConfirm={handleConfirmDelete}
+// />
+// <DeleteModal
+//   isOpen={Boolean(deletingUser)}
+//   itemName={deletingUser?.fullName || ""}
+//   itemType="User"
+//   onClose={() => setDeletingUser(null)}
+//   onConfirm={handleConfirmDelete}
+// />

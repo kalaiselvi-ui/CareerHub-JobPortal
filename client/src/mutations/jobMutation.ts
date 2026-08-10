@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createJobs } from "../api/jobApi.ts";
+import { createJobs, deleteJob } from "../api/jobApi.ts";
 
 export const jobMutation = () => {
   const queryClient = useQueryClient();
@@ -12,7 +12,16 @@ export const jobMutation = () => {
       });
     },
   });
+  const deleteMutation = useMutation({
+    mutationFn: deleteJob,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+    },
+  });
   return {
     createJobMutation,
+    deleteMutation,
   };
 };

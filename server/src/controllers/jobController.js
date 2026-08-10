@@ -158,12 +158,7 @@ export const updateJob = async (req, res) => {
 export const deleteJob = async (req, res) => {
   try {
     const { id: userId, role } = req.user;
-    if (role !== "recruiter") {
-      return res.status(403).json({
-        success: false,
-        message: "Only recruiters can delete jobs",
-      });
-    }
+
     const { id: jobId } = req.params;
     const job = await Job.findById(jobId);
     if (!job) {
@@ -171,12 +166,22 @@ export const deleteJob = async (req, res) => {
         message: "Job not found",
       });
     }
-    if (job.createdBy.toString() !== userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "You cannot delete this job" });
-    }
+    // Recruiters can delete only their own jobs
+    if (role === "recruiter") {
+      if (!job.createdBy) {
+        return res.status(403).json({
+          success: false,
+          message: "You cannot delete this job",
+        });
+      }
 
+      if (job.createdBy.toString() !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: "You cannot delete this job",
+        });
+      }
+    }
     await job.deleteOne();
     return res.status(200).json({
       success: true,

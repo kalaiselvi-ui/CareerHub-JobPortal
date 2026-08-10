@@ -25,6 +25,11 @@ jobRoutes.get("/", getAllJob);
 jobRoutes.get("/my-jobs", authMiddleware, getMyJobs);
 jobRoutes.get("/:id", getJobById);
 jobRoutes.put("/:id", authMiddleware, updateJob);
-jobRoutes.delete("/:id", authMiddleware, deleteJob);
+jobRoutes.delete(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("admin", "recruiter"),
+  deleteJob,
+);
 
 export default jobRoutes;
