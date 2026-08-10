@@ -16,3 +16,19 @@ export const deleteJob = async (id: string) => {
   const response = await axiosInstance.delete(`/api/jobs/${id}`);
   return response.data.data;
 };
+
+export const editJob = async ({
+  data,
+  id,
+}: {
+  data: JobFormData;
+  id: string;
+}): Promise<JobFormData> => {
+  const response = await axiosInstance.put(`/api/jobs/${id}`, data);
+  return response.data.data;
+};
+
+export const getJobById = async (id: string) => {
+  const response = await axiosInstance.get(`/api/jobs/${id}`);
+  return response.data.data;
+};

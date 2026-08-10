@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Plus,
   BriefcaseBusiness,
@@ -16,19 +16,16 @@ import {
   MapPin,
   Clock,
 } from "lucide-react";
+import { jobMutation } from "../../mutations/jobMutation.ts";
+import toast from "react-hot-toast";
+import { DeleteModal } from "../../components/DeleteModal.tsx";
+import { useJobs } from "../../hooks/useJob.ts";
+import type { DetailedJob, JobProps } from "../../type/job.type.ts";
+import { formatDeadline } from "../../utils/formatDeadline.ts";
 
 // --- TypeScript Interfaces ---
 
 export type JobStatus = "Active" | "Closed" | "Draft";
-
-export interface Job {
-  id: string;
-  title: string;
-  company: string;
-  status: JobStatus;
-  location: string;
-  posted: string;
-}
 
 export interface User {
   id: string;
@@ -49,43 +46,6 @@ export interface QuickActionProps {
   to?: string;
   onClick?: () => void;
 }
-
-// --- Mock Data ---
-
-const MOCK_JOBS: Job[] = [
-  {
-    id: "1",
-    title: "Senior React Developer",
-    company: "Tech Solutions",
-    status: "Active",
-    location: "Dubai, UAE",
-    posted: "2 hours ago",
-  },
-  {
-    id: "2",
-    title: "Flutter Developer",
-    company: "Digital Labs",
-    status: "Active",
-    location: "Abu Dhabi, UAE",
-    posted: "5 hours ago",
-  },
-  {
-    id: "3",
-    title: "Full Stack Developer",
-    company: "Cloud Systems",
-    status: "Closed",
-    location: "Dubai, UAE",
-    posted: "1 day ago",
-  },
-  {
-    id: "4",
-    title: "UI/UX Designer",
-    company: "Creative Studio",
-    status: "Draft",
-    location: "Sharjah, UAE",
-    posted: "2 days ago",
-  },
-];
 
 const MOCK_USERS: User[] = [
   {
@@ -116,16 +76,21 @@ const MOCK_USERS: User[] = [
 
 // --- Helper Components ---
 
-const StatusBadge: React.FC<{ status: JobStatus }> = ({ status }) => {
-  const styles: Record<JobStatus, string> = {
+const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
+  const normalized = (status || "").toLowerCase();
+
+  const styles: Record<string, string> = {
     Active: "bg-emerald-50 text-emerald-700 border-emerald-200",
     Closed: "bg-rose-50 text-rose-700 border-rose-200",
     Draft: "bg-slate-100 text-slate-700 border-slate-200",
   };
 
+  const badgeStyle =
+    styles[normalized] || "bg-slate-100 text-slate-700 border-slate-200";
+
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${styles[status]}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border capitalize ${badgeStyle}`}
     >
       {status}
     </span>
@@ -183,6 +148,40 @@ export const AdminDashboard: React.FC = () => {
   const handleAction = (actionName: string, id?: string) => {
     console.log(`Action triggered: ${actionName}${id ? ` for ID: ${id}` : ""}`);
   };
+  const { deleteJobMutation } = jobMutation();
+  const [deletingJob, setDeletingJob] = useState<DetailedJob | JobProps | null>(
+    null,
+  );
+  const { data: jobs = [], isLoading, isError } = useJobs();
+  const navigate = useNavigate();
+
+  if (isLoading) {
+    return <div>Loading jobs...</div>;
+  }
+
+  if (isError) {
+    return <div>Failed to load jobs.</div>;
+  }
+  if (jobs.length === 0) {
+    return (
+      <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center text-surface-dark/60">
+        No jobs found matching your filter criteria.
+      </div>
+    );
+  }
+
+  const handleConfirmDelete = () => {
+    if (!deletingJob) return;
+    deleteJobMutation.mutate(deletingJob._id, {
+      onSuccess: () => {
+        toast.success("Deleted Successfully");
+        setDeletingJob(null);
+      },
+      onError: (error) => {
+        toast.error(error.message || "failed to delete");
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-surface-light p-4 sm:p-6 lg:p-8">
@@ -223,8 +222,8 @@ export const AdminDashboard: React.FC = () => {
                 Recent Jobs
               </h2>
               <button
-                onClick={() => handleAction("View All Jobs")}
-                className="text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+                onClick={() => navigate("/jobs/manage")}
+                className="text-sm cursor-pointer font-medium text-primary hover:text-primary-hover transition-colors"
               >
                 View all
               </button>
@@ -244,9 +243,9 @@ export const AdminDashboard: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border-subtle text-slate-700">
-                  {MOCK_JOBS.map((job) => (
+                  {jobs.slice(0, 5).map((job) => (
                     <tr
-                      key={job.id}
+                      key={job._id}
                       className="hover:bg-slate-50/80 transition-colors"
                     >
                       <td className="py-4 px-4 font-medium text-surface-dark">
@@ -262,26 +261,26 @@ export const AdminDashboard: React.FC = () => {
                         <StatusBadge status={job.status} />
                       </td>
                       <td className="py-4 px-4 text-slate-500 whitespace-nowrap">
-                        {job.posted}
+                        {formatDeadline(job.createdAt)}{" "}
                       </td>
                       <td className="py-4 px-4 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-2 text-slate-500">
                           <button
-                            onClick={() => handleAction("View Job", job.id)}
+                            onClick={() => navigate(`/jobs/${job._id}`)}
                             title="View"
                             className="p-1.5 hover:text-primary hover:bg-blue-50 rounded-md transition-colors"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleAction("Edit Job", job.id)}
+                            onClick={() => navigate(`/jobs/${job._id}/edit`)}
                             title="Edit"
                             className="p-1.5 hover:text-amber-600 hover:bg-amber-50 rounded-md transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleAction("Delete Job", job.id)}
+                            onClick={() => setDeletingJob(job)}
                             title="Delete"
                             className="p-1.5 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                           >
@@ -297,8 +296,8 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Mobile Card Layout View */}
             <div className="block md:hidden divide-y divide-border-subtle">
-              {MOCK_JOBS.map((job) => (
-                <div key={job.id} className="p-4 space-y-3">
+              {jobs.map((job) => (
+                <div key={job._id} className="p-4 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <h3 className="font-semibold text-surface-dark">
@@ -316,26 +315,26 @@ export const AdminDashboard: React.FC = () => {
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
-                      {job.posted}
+                      {formatDeadline(job.createdAt)}{" "}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-100">
                     <button
-                      onClick={() => handleAction("View Job", job.id)}
+                      onClick={() => navigate(`/jobs/${job._id}`)}
                       className="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-primary"
                     >
                       <Eye className="w-3.5 h-3.5" /> View
                     </button>
                     <button
-                      onClick={() => handleAction("Edit Job", job.id)}
+                      onClick={() => navigate(`/jobs/${job._id}/edit`)}
                       className="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-amber-600"
                     >
                       <Pencil className="w-3.5 h-3.5" /> Edit
                     </button>
                     <button
-                      onClick={() => handleAction("Delete Job", job.id)}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-rose-600 hover:text-rose-700"
+                      onClick={() => setDeletingJob(job)}
+                      className="inline-flex items-center gap-1 text-xs font-medium text-slate-600 hover:text-amber-600"
                     >
                       <Trash2 className="w-3.5 h-3.5" /> Delete
                     </button>
@@ -424,6 +423,13 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+      <DeleteModal
+        isOpen={Boolean(deletingJob)}
+        itemName={deletingJob?.title || ""}
+        itemType="Job"
+        onClose={() => setDeletingJob(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 };

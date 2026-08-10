@@ -12,6 +12,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 import ProtectedRoutes from "./components/routes/ProtectedRoutes.tsx";
 import { CreateJob } from "./pages/job-management/CreateJob.tsx";
 import ManageJobs from "./pages/job-management/ManageJobs.tsx";
+import { EditJob } from "./pages/job-management/EditJob.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -48,7 +49,7 @@ const App = () => {
             >
               <Route path="/jobs/manage" element={<ManageJobs />} />
               <Route path="/jobs/create" element={<CreateJob />} />
-              {/* <Route path="/jobs/:id/edit" element={<EditJob />} /> */}
+              <Route path="/jobs/:id/edit" element={<EditJob />} />
             </Route>
 
             <Route path="*" element={<div>404 - Page Not Found</div>} />

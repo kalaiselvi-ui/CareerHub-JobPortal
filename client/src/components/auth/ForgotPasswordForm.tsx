@@ -26,6 +26,9 @@ export const ForgotPasswordForm: React.FC = () => {
       onSuccess: () => {
         toast.success("Reset link send successfully");
       },
+      onError: (error) => {
+        toast.error(error.message || "failed to send reset link");
+      },
     });
   };
 

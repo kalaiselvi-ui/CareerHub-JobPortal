@@ -70,7 +70,7 @@ export const ManageJobs: React.FC = () => {
 
   // Local state to track visually deleted IDs prior to API hook integration
   const [deletedIds] = useState<string[]>([]);
-  const { deleteMutation } = jobMutation();
+  const { deleteJobMutation } = jobMutation();
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -144,10 +144,13 @@ export const ManageJobs: React.FC = () => {
 
   const handleConfirmDelete = () => {
     if (!deletingJob) return;
-    deleteMutation.mutate(deletingJob._id, {
+    deleteJobMutation.mutate(deletingJob._id, {
       onSuccess: () => {
         toast.success("Job Deleted Successfully");
         setDeletingJob(null);
+      },
+      onError: (error) => {
+        toast.error(error.message || "failed to delete");
       },
     });
   };

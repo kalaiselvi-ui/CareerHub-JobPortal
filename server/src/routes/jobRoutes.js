@@ -24,7 +24,12 @@ jobRoutes.get("/", getAllJob);
 // 2. Specific Named Routes (MUST come before dynamic :id routes)
 jobRoutes.get("/my-jobs", authMiddleware, getMyJobs);
 jobRoutes.get("/:id", getJobById);
-jobRoutes.put("/:id", authMiddleware, updateJob);
+jobRoutes.put(
+  "/:id",
+  authMiddleware,
+  authorizeRoles("admin", "recruiter"),
+  updateJob,
+);
 jobRoutes.delete(
   "/:id",
   authMiddleware,

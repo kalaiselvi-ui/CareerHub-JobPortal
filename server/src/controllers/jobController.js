@@ -110,6 +110,7 @@ export const updateJob = async (req, res) => {
       description,
       company,
       location,
+      category,
       salary,
       skills,
       jobType,
@@ -126,11 +127,23 @@ export const updateJob = async (req, res) => {
     if (!job) {
       return res.status(404).json({ message: "Job not Found" });
     }
-    if (job.createdBy.toString() !== userId) {
-      return res
-        .status(403)
-        .json({ success: false, message: "You cannot update this job" });
+
+    if (role === "recruiter") {
+      if (!job.createdBy) {
+        return res.status(403).json({
+          success: false,
+          message: "You cannot delete this job",
+        });
+      }
+
+      if (job.createdBy.toString() !== userId) {
+        return res.status(403).json({
+          success: false,
+          message: "You cannot delete this job",
+        });
+      }
     }
+
     job.title = title ?? job.title;
     job.description = description ?? job.description;
     job.company = company ?? job.company;
@@ -138,10 +151,16 @@ export const updateJob = async (req, res) => {
     job.salary = salary ?? job.salary;
     job.skills = skills ?? job.skills;
     job.status = status ?? job.status;
+    job.category = category ?? job.category;
     job.applicationDeadline = applicationDeadline ?? job.applicationDeadline;
     job.jobType = jobType ?? job.jobType;
     job.experienceLevel = experienceLevel ?? job.experienceLevel;
     job.workMode = workMode ?? job.workMode;
+
+    if (req.file) {
+      const companyLogo = await uploadImageToCloudinary(req.file.buffer);
+      job.companyLogo = companyLogo.secure_url;
+    }
 
     await job.save();
     return res

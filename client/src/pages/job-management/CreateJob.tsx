@@ -187,7 +187,7 @@ export const CreateJob = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Job Type *
+              Job Type
             </label>
             <select
               {...register("jobType")}
@@ -201,7 +201,7 @@ export const CreateJob = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Work Mode *
+              Work Mode
             </label>
             <select
               {...register("workMode")}
@@ -215,7 +215,7 @@ export const CreateJob = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Experience Level *
+              Experience Level
             </label>
             <select
               {...register("experienceLevel")}

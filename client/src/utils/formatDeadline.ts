@@ -1,9 +1,10 @@
-export function formatDeadline(dateString: string) {
-  if (!dateString) return "Not specified";
+export function formatDeadline(dateString?: string) {
+  if (!dateString) return "N/A";
 
   const date = new Date(dateString);
 
-  if (isNaN(date.getTime())) return "Not specified";
+  // If dateString is relative (e.g. "2 hours ago"), preserve it as fallback
+  if (isNaN(date.getTime())) return dateString;
 
   return date.toLocaleDateString("en-US", {
     month: "short",

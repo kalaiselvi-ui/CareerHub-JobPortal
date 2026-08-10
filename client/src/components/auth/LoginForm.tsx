@@ -32,6 +32,9 @@ export const LoginForm: React.FC = () => {
         toast.success(`Login Successfully ${response?.user?.fullName}`);
         navigate("/");
       },
+      onError: (error) => {
+        toast.error(error.message || "Login failed");
+      },
     });
   };
 

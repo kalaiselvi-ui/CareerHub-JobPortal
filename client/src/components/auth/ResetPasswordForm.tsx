@@ -42,6 +42,9 @@ export const ResetPasswordForm: React.FC = () => {
           toast.success("Password reset successfully");
           navigate("/login");
         },
+        onError: (error) => {
+          toast.error(error.message || "failed to reset");
+        },
       },
     );
   };

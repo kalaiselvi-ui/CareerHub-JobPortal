@@ -14,6 +14,7 @@ export const JobsPage: React.FC = () => {
   const { data: jobs = [], isLoading, isError } = useJobs();
   useEffect(() => {
     if (id) {
+      setShowMobileDetails(true);
       const foundJob = jobs.find((j) => j._id === id);
       if (foundJob) {
         setSelectedJob(foundJob);
@@ -21,6 +22,8 @@ export const JobsPage: React.FC = () => {
         setSelectedJob(jobs[0] || null);
       }
     } else {
+      setShowMobileDetails(false);
+
       setSelectedJob(jobs[0] || null);
     }
   }, [id, jobs]);
