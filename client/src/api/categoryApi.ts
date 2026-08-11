@@ -1,7 +1,4 @@
-import type {
-  CategoryResponse,
-  CreateCategory,
-} from "../type/category.type.ts";
+import type { CategoryResponse } from "../type/category.type.ts";
 import axiosInstance from "./axiosInstance.ts";
 
 export const getCategories = async (): Promise<CategoryResponse> => {
@@ -9,7 +6,9 @@ export const getCategories = async (): Promise<CategoryResponse> => {
   return response.data;
 };
 
-export const createCategories = async (data: CreateCategory) => {
+export const createCategories = async (name: string) => {
+  const data = { name };
+
   const response = await axiosInstance.post("/api/category/", data);
   return response.data;
 };

@@ -12,14 +12,14 @@ const categoryRoutes = express.Router();
 categoryRoutes.post(
   "/",
   authMiddleware,
-  authorizeRoles("admin", "recruiter"),
+  authorizeRoles("admin"),
   createCategory,
 );
 categoryRoutes.get("/", getCategory);
 categoryRoutes.delete(
   "/:id",
   authMiddleware,
-  authorizeRoles("admin", "recruiter"),
+  authorizeRoles("admin"),
   deleteCategory,
 );
 

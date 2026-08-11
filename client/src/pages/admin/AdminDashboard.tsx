@@ -418,7 +418,7 @@ export const AdminDashboard: React.FC = () => {
             <QuickActionButton
               title="Manage Categories"
               icon={FolderKanban}
-              onClick={() => handleAction("Manage Categories")}
+              to="/categories/manage"
             />
           </div>
         </div>

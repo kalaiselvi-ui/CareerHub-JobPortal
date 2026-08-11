@@ -21,15 +21,28 @@ export const createCategory = async (req, res) => {
 
 export const getCategory = async (req, res) => {
   try {
-    // const { id } = req.params;
-    const category = await Category.find();
+    const category = await Category.aggregate([
+      {
+        $lookup: {
+          from: "jobs",
+          localField: "_id",
+          foreignField: "category",
+          as: "jobs",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          slug: 1,
+          jobCount: { $size: "$jobs" },
+        },
+      },
+    ]);
 
-    if (!category) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Category not found" });
-    }
-    return res.status(200).json({ success: true, category });
+    return res.status(200).json({
+      success: true,
+      category,
+    });
   } catch (err) {
     console.log(err);
     return res
@@ -58,19 +71,3 @@ export const deleteCategory = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-
-// 1. Information Technology
-// 2. Finance & Accounting
-// 3. Healthcare & Medical
-// 4. Marketing & Sales
-// 5. Human Resources
-// 6. Engineering & Construction
-// 7. Design & Creative
-// 8. Business & Management
-// 9. Education & Training
-// 10. Legal & Compliance
-// 11. Customer Service
-// 12. Retail & E-commerce
-// 13. Logistics & Supply Chain
-// 14. Hospitality & Tourism
-// 15. Media & Communications

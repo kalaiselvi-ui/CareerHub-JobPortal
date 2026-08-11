@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
         },
         {
           label: "Categories",
-          path: "/admin/categories",
+          path: "/categories/manage",
           icon: FileText,
         },
         {
