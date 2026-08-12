@@ -6,7 +6,7 @@ export const uploadImageToCloudinary = (buffer) => {
       .upload_stream(
         {
           resource_type: "image",
-          folder: "careerhub/company-logos",
+          folder: "careerhub/uploads",
         },
         (error, result) => {
           if (error) {

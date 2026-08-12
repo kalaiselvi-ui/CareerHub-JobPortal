@@ -6,7 +6,7 @@ import type { ForgotPasswordSchemaType } from "../schemas/forgotPasswordSchema.t
 
 export const registerUser = async (data: RegisterSchemaType) => {
   try {
-    const response = await axiosInstance.post(`/api/user/register`, data);
+    const response = await axiosInstance.post(`/api/auth/register`, data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -18,7 +18,7 @@ export const registerUser = async (data: RegisterSchemaType) => {
 
 export const loginUser = async (data: LoginSchemaType) => {
   try {
-    const response = await axiosInstance.post("/api/user/login", data);
+    const response = await axiosInstance.post("/api/auth/login", data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -31,7 +31,7 @@ export const loginUser = async (data: LoginSchemaType) => {
 export const forgotPassword = async (email: ForgotPasswordSchemaType) => {
   try {
     const response = await axiosInstance.post(
-      "/api/user/forgot-password",
+      "/api/auth/forgot-password",
       email,
     );
     return response.data;
@@ -53,7 +53,7 @@ export const resetPassword = async ({
 }) => {
   try {
     const response = await axiosInstance.post(
-      `/api/user/reset-password/${token}`,
+      `/api/auth/reset-password/${token}`,
       { password },
     );
     return response.data;

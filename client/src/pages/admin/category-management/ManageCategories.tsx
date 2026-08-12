@@ -1,12 +1,12 @@
 import { useState, useMemo } from "react";
 import { Plus, Search, Trash2, Folder, Briefcase } from "lucide-react";
-import { DeleteModal } from "../../components/DeleteModal.tsx";
-import { AddCategoryModal } from "../../components/AddCategoryModal.tsx";
-import type { Category } from "../../type/category.type.ts";
-import { useCategories } from "../../hooks/useCategories.ts";
+import { DeleteModal } from "../../../components/DeleteModal.tsx";
+import { AddCategoryModal } from "../../../components/AddCategoryModal.tsx";
+import type { Category } from "../../../type/category.type.ts";
+import { useCategories } from "../../../hooks/useCategories.ts";
 
 import toast from "react-hot-toast";
-import { categoryMutation } from "../../mutations/categoriesMutation.ts";
+import { categoryMutation } from "../../../mutations/categoriesMutation.ts";
 
 export default function ManageCategories() {
   // State

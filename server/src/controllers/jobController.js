@@ -1,3 +1,4 @@
+import { uploadImageToCloudinary } from "../../utils/uploadImage.js";
 import Job from "../models/job.model.js";
 
 export const createJob = async (req, res) => {

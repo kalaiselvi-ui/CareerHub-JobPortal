@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
         },
         {
           label: "Manage Users",
-          path: "/admin/users",
+          path: "/users/manage",
           icon: Users,
         },
         {
