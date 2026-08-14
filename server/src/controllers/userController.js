@@ -25,7 +25,7 @@ export const getMyProfile = async (req, res) => {
 export const getAllUser = async (req, res) => {
   try {
     const users = await User.find();
-    if (!user) {
+    if (!users) {
       return res.status(404).json({
         success: false,
         message: "User not found",
@@ -65,8 +65,7 @@ export const deleteUserById = async (req, res) => {
 
 export const editProfile = async (req, res) => {
   try {
-    const { fullName, email, role, phone, location, bio, profileImage } =
-      req.body;
+    const { fullName, email, phone, location, bio, profileImage } = req.body;
     const { id } = req.user;
     if (!fullName || !email) {
       return res.status(400).json({

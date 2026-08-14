@@ -18,6 +18,8 @@ import {
   Clock,
   FilterX,
   Loader2,
+  FileText,
+  Archive,
 } from "lucide-react";
 import { useJobs } from "../../hooks/useJob.ts";
 import type { DetailedJob, JobProps } from "../../type/job.type.ts";
@@ -26,6 +28,8 @@ import { SummaryCard } from "../../components/SummaryCard.tsx";
 import { jobMutation } from "../../mutations/jobMutation.ts";
 import toast from "react-hot-toast";
 import { DeleteModal } from "../../components/DeleteModal.tsx";
+import DashboardHeader from "../../components/dashboard/common/DashboardHeader.tsx";
+import StatCard from "../../components/dashboard/common/StatCard.tsx";
 
 export interface FilterState {
   search: string;
@@ -126,6 +130,36 @@ export const ManageJobs: React.FC = () => {
     };
   }, [jobs]);
 
+  const jobStats = [
+    {
+      title: "Total Jobs",
+      value: 21,
+      icon: Briefcase,
+      iconBgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      title: "Active Jobs",
+      value: 19,
+      icon: CheckCircle2,
+      iconBgColor: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+    },
+    {
+      title: "Draft Jobs",
+      value: 1,
+      icon: FileText,
+      iconBgColor: "bg-amber-50",
+      iconColor: "text-amber-600",
+    },
+    {
+      title: "Closed Jobs",
+      value: 1,
+      icon: Archive,
+      iconBgColor: "bg-rose-50",
+      iconColor: "text-rose-600",
+    },
+  ];
   const handleFilterChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -196,55 +230,19 @@ export const ManageJobs: React.FC = () => {
     <div className="min-h-screen bg-surface-light p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* 1. Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-surface-dark">
-              Manage Jobs
-            </h1>
-            <p className="text-sm text-slate-500 mt-1">
-              Create, manage, and monitor your job postings.
-              {role === "recruiter" && " (Showing your listed positions)"}
-            </p>
-          </div>
-          <Link
-            to="/jobs/create"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white font-medium text-sm rounded-xl shadow-sm transition-colors self-start sm:self-auto cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Create Job</span>
-          </Link>
-        </div>
+
+        <DashboardHeader
+          title="Manage Jobs"
+          description="Create, manage, and monitor your job postings."
+          buttonText="Create Job"
+          buttonLink="/jobs/create"
+        />
 
         {/* 2. Dynamic Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <SummaryCard
-            title="Total Jobs"
-            count={stats.total}
-            subtitle="All job postings"
-            icon={Briefcase}
-            iconColorClass="bg-blue-50 text-primary"
-          />
-          <SummaryCard
-            title="Active Jobs"
-            count={stats.active}
-            subtitle="Currently published"
-            icon={CheckCircle2}
-            iconColorClass="bg-emerald-50 text-emerald-600"
-          />
-          <SummaryCard
-            title="Draft Jobs"
-            count={stats.draft}
-            subtitle="In progress"
-            icon={FileEdit}
-            iconColorClass="bg-amber-50 text-amber-600"
-          />
-          <SummaryCard
-            title="Closed Jobs"
-            count={stats.closed}
-            subtitle="Archived / Filled"
-            icon={XCircle}
-            iconColorClass="bg-rose-50 text-rose-600"
-          />
+          {jobStats.map((stat, i) => (
+            <StatCard key={i} {...stat} />
+          ))}{" "}
         </div>
 
         {/* 3. Search and Filters */}

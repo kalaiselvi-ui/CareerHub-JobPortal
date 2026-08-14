@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
         },
         {
           label: "Create Job",
-          path: "/recruiter/jobs/create",
+          path: "/jobs/create",
           icon: PlusCircle,
         },
         {

@@ -16,6 +16,7 @@ import { EditJob } from "./pages/job-management/EditJob.tsx";
 import ManageCategories from "./pages/admin/category-management/ManageCategories.tsx";
 import ManageUsers from "./pages/admin/user/ManageUsers.tsx";
 import AdminProfile from "./pages/admin/Profile.tsx";
+import RecruiterDashboard from "./pages/recruiter/Dashboard.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -54,13 +55,20 @@ const App = () => {
               <Route path="/jobs/create" element={<CreateJob />} />
               <Route path="/jobs/:id/edit" element={<EditJob />} />
             </Route>
+
+            <Route element={<ProtectedRoutes allowedRoles={["recruiter"]} />}>
+              <Route
+                path="/recruiter/dashboard"
+                element={<RecruiterDashboard />}
+              />
+            </Route>
+
             <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
               <Route path="/categories/manage" element={<ManageCategories />} />
               <Route path="/categories/" element={<ManageCategories />} />
               <Route path="/users/manage" element={<ManageUsers />} />
-              <Route path="/profile" element={<AdminProfile />} />
             </Route>
-
+            <Route path="/profile" element={<AdminProfile />} />
             <Route path="*" element={<div>404 - Page Not Found</div>} />
           </Route>
         </Routes>

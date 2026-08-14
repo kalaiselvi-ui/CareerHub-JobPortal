@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  Plus,
-  BriefcaseBusiness,
-  CheckCircle,
   Users,
   UserCheck,
   Eye,
@@ -15,6 +12,7 @@ import {
   PlusCircle,
   MapPin,
   Clock,
+  CheckCircle2,
 } from "lucide-react";
 import { jobMutation } from "../../mutations/jobMutation.ts";
 import toast from "react-hot-toast";
@@ -22,59 +20,20 @@ import { DeleteModal } from "../../components/DeleteModal.tsx";
 import { useJobs } from "../../hooks/useJob.ts";
 import type { DetailedJob, JobProps } from "../../type/job.type.ts";
 import { formatDeadline } from "../../utils/formatDeadline.ts";
+import { useALLUsers } from "../../hooks/useUser.ts";
+import DashboardHeader from "../../components/dashboard/common/DashboardHeader.tsx";
+import WelcomeSection from "../../components/dashboard/common/WelcomeSection.tsx";
+import { useAuthStore } from "../../store/authStore.ts";
+import QuickActionButton from "../../components/dashboard/common/QuickActionButton.tsx";
+import StatCard from "../../components/dashboard/common/StatCard.tsx";
 
 // --- TypeScript Interfaces ---
-
-export type JobStatus = "Active" | "Closed" | "Draft";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: "Candidate" | "Recruiter" | "Admin";
-}
 
 export interface StatCardProps {
   title: string;
   value: number | string;
   icon: React.ElementType;
 }
-
-export interface QuickActionProps {
-  title: string;
-  icon: React.ElementType;
-  to?: string;
-  onClick?: () => void;
-}
-
-const MOCK_USERS: User[] = [
-  {
-    id: "1",
-    name: "John Smith",
-    email: "john@example.com",
-    role: "Candidate",
-  },
-  {
-    id: "2",
-    name: "Sarah Wilson",
-    email: "sarah@example.com",
-    role: "Recruiter",
-  },
-  {
-    id: "3",
-    name: "Michael Brown",
-    email: "michael@example.com",
-    role: "Candidate",
-  },
-  {
-    id: "4",
-    name: "Anna Davis",
-    email: "anna@example.com",
-    role: "Recruiter",
-  },
-];
-
-// --- Helper Components ---
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const normalized = (status || "").toLowerCase();
@@ -97,50 +56,71 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   );
 };
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon }) => (
-  <div className="bg-white p-5 rounded-xl border border-border-subtle shadow-sm hover:shadow-md transition-shadow duration-200 flex items-center justify-between">
-    <div>
-      <p className="text-sm font-medium text-slate-500">{title}</p>
-      <h3 className="text-2xl font-bold text-surface-dark mt-1">{value}</h3>
-    </div>
-    <div className="p-3 bg-blue-50 text-primary rounded-lg">
-      <Icon className="w-6 h-6" />
-    </div>
-  </div>
-);
+const stats = [
+  {
+    title: "Total Jobs",
+    value: 24,
+    icon: Briefcase,
+    iconBgColor: "bg-blue-50",
+    iconColor: "text-blue-600",
+  },
+  {
+    title: "Active Jobs",
+    value: 18,
+    icon: CheckCircle2,
+    iconBgColor: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+  },
+  {
+    title: "Total Users",
+    value: 156,
+    icon: Users,
+    iconBgColor: "bg-indigo-50",
+    iconColor: "text-indigo-600",
+  },
+  {
+    title: "Recruiters",
+    value: 32,
+    icon: UserCheck,
+    iconBgColor: "bg-purple-50",
+    iconColor: "text-purple-600",
+  },
+];
 
-export const QuickActionButton = ({
-  title,
-  icon: Icon,
-  to,
-  onClick,
-}: QuickActionProps) => {
-  const content = (
-    <>
-      <Icon className="w-5 h-5 text-primary" />
-      <span className="font-medium text-gray-900">{title}</span>
-    </>
-  );
-
-  const className =
-    "flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all cursor-pointer";
-
-  // Render a Link if 'to' is provided
-  if (to) {
-    return (
-      <Link to={to} className={className}>
-        {content}
-      </Link>
-    );
-  }
-
-  // Fallback to a button if using onClick
-  return (
-    <button type="button" onClick={onClick} className={className}>
-      {content}
-    </button>
-  );
-};
+const adminActions = [
+  {
+    title: "Create Job",
+    description: "Post a new job opening",
+    icon: PlusCircle,
+    to: "/jobs/create",
+    iconBgColor: "bg-blue-100",
+    iconColor: "text-blue-600",
+  },
+  {
+    title: "Manage Jobs",
+    description: "Review and edit active jobs",
+    icon: Briefcase,
+    to: "/jobs/manage",
+    iconBgColor: "bg-indigo-100",
+    iconColor: "text-indigo-600",
+  },
+  {
+    title: "Manage Users",
+    description: "View candidates & recruiters",
+    icon: UserCog,
+    to: "/users/manage",
+    iconBgColor: "bg-purple-100",
+    iconColor: "text-purple-600",
+  },
+  {
+    title: "Manage Categories",
+    description: "Organize job classifications",
+    icon: FolderKanban,
+    to: "/categories/manage",
+    iconBgColor: "bg-emerald-100",
+    iconColor: "text-emerald-600",
+  },
+];
 
 // --- Main Component ---
 
@@ -148,12 +128,15 @@ export const AdminDashboard: React.FC = () => {
   const handleAction = (actionName: string, id?: string) => {
     console.log(`Action triggered: ${actionName}${id ? ` for ID: ${id}` : ""}`);
   };
+  const { user } = useAuthStore();
+
   const { deleteJobMutation } = jobMutation();
   const [deletingJob, setDeletingJob] = useState<DetailedJob | JobProps | null>(
     null,
   );
   const { data: jobs = [], isLoading, isError } = useJobs();
   const navigate = useNavigate();
+  const { data: users = [] } = useALLUsers();
 
   if (isLoading) {
     return <div>Loading jobs...</div>;
@@ -186,31 +169,30 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-surface-light p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* 1. Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-surface-dark">
-              Admin Dashboard
-            </h1>
-            <p className="text-sm text-slate-500 mt-1">
-              Manage and monitor the CareerHub platform
-            </p>
-          </div>
-          <Link
-            to="/jobs/create"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-xl shadow-sm transition-colors cursor-pointer self-start sm:self-auto"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Create Job</span>
-          </Link>
-        </div>
+        <DashboardHeader
+          title="Admin Dashboard"
+          description="Manage and monitor the CareerHub platform."
+          buttonText="Create Job"
+          buttonLink="/jobs/create"
+        />
+
+        <WelcomeSection
+          userName={user?.fullName ? `${user.fullName} (Admin)` : "Admin"}
+          roleDescription="Here's an overview of your platform and recruitment activity."
+        />
 
         {/* 2. Summary Statistics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          <StatCard title="Total Jobs" value={24} icon={BriefcaseBusiness} />
-          <StatCard title="Active Jobs" value={18} icon={CheckCircle} />
-          <StatCard title="Total Users" value={156} icon={Users} />
-          <StatCard title="Recruiters" value={32} icon={UserCheck} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((stat, index) => (
+            <StatCard
+              key={index}
+              title={stat.title}
+              value={stat.value}
+              icon={stat.icon}
+              iconBgColor={stat.iconBgColor}
+              iconColor={stat.iconColor}
+            />
+          ))}
         </div>
 
         {/* Main Content Grid: Recent Jobs (8 cols) & Recent Users (4 cols) */}
@@ -360,18 +342,18 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               <div className="p-4 space-y-4">
-                {MOCK_USERS.map((user) => (
+                {users?.map((user) => (
                   <div
-                    key={user.id}
+                    key={user._id}
                     className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 transition-colors"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-blue-100 text-primary font-bold flex items-center justify-center text-sm">
-                        {user.name.charAt(0)}
+                        {user?.fullName?.charAt(0)}
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-surface-dark leading-tight">
-                          {user.name}
+                          {user.fullName}
                         </p>
                         <p className="text-xs text-slate-500 mt-0.5">
                           {user.email}
@@ -379,10 +361,12 @@ export const AdminDashboard: React.FC = () => {
                       </div>
                     </div>
                     <span
-                      className={`text-xs px-2.5 py-1 rounded-md font-medium ${
-                        user.role === "Recruiter"
+                      className={`text-xs px-2.5 py-1 rounded-md font-medium capitalize ${
+                        user.role?.toLowerCase() === "recruiter"
                           ? "bg-orange-50 text-secondary border border-orange-200"
-                          : "bg-slate-100 text-slate-600"
+                          : user.role?.toLowerCase() === "admin"
+                            ? "bg-purple-50 text-purple-700 border border-purple-200" // 👈 Admin styling
+                            : "bg-slate-100 text-slate-600 border border-slate-200" // Default (Candidate)
                       }`}
                     >
                       {user.role}
@@ -400,26 +384,9 @@ export const AdminDashboard: React.FC = () => {
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <QuickActionButton
-              title="Create Job"
-              icon={PlusCircle}
-              to="/jobs/create" // Adjust route to your actual path
-            />
-            <QuickActionButton
-              title="Manage Jobs"
-              icon={Briefcase}
-              to="/jobs/manage"
-            />
-            <QuickActionButton
-              title="Manage Users"
-              icon={UserCog}
-              onClick={() => handleAction("Manage Users")}
-            />
-            <QuickActionButton
-              title="Manage Categories"
-              icon={FolderKanban}
-              to="/categories/manage"
-            />
+            {adminActions.map((action, index) => (
+              <QuickActionButton key={index} {...action} />
+            ))}
           </div>
         </div>
       </div>

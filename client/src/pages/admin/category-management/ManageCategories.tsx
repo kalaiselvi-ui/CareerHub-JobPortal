@@ -1,5 +1,14 @@
 import { useState, useMemo } from "react";
-import { Plus, Search, Trash2, Folder, Briefcase } from "lucide-react";
+import {
+  Search,
+  Trash2,
+  Folder,
+  Briefcase,
+  AlertCircle,
+  CheckCircle2,
+  Layers,
+  FolderTree,
+} from "lucide-react";
 import { DeleteModal } from "../../../components/DeleteModal.tsx";
 import { AddCategoryModal } from "../../../components/AddCategoryModal.tsx";
 import type { Category } from "../../../type/category.type.ts";
@@ -7,6 +16,8 @@ import { useCategories } from "../../../hooks/useCategories.ts";
 
 import toast from "react-hot-toast";
 import { categoryMutation } from "../../../mutations/categoriesMutation.ts";
+import DashboardHeader from "../../../components/dashboard/common/DashboardHeader.tsx";
+import StatCard from "../../../components/dashboard/common/StatCard.tsx";
 
 export default function ManageCategories() {
   // State
@@ -43,27 +54,51 @@ export default function ManageCategories() {
     });
   };
 
+  const categoryStats = [
+    {
+      title: "Total Categories",
+      value: 13,
+      icon: FolderTree,
+      iconBgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      title: "Active Categories",
+      value: 12,
+      icon: CheckCircle2,
+      iconBgColor: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+    },
+    {
+      title: "Total Associated Jobs",
+      value: 19,
+      icon: Layers,
+      iconBgColor: "bg-indigo-50",
+      iconColor: "text-indigo-600",
+    },
+    {
+      title: "Unassigned Categories",
+      value: 4,
+      icon: AlertCircle,
+      iconBgColor: "bg-amber-50",
+      iconColor: "text-amber-600",
+    },
+  ];
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* 1. Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-surface-dark">
-            Manage Categories
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage job categories available on the platform.
-          </p>
-        </div>
 
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white text-sm font-medium rounded-lg transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Category</span>
-        </button>
+      <DashboardHeader
+        title="Manage Categories"
+        description="Manage job categories available on the platform."
+        buttonText="Add Category"
+        buttonLink="/categories/create" // or onButtonClick={() => setModalOpen(true)}
+      />
+      {/* Reused StatCards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {categoryStats.map((stat, i) => (
+          <StatCard key={i} {...stat} />
+        ))}
       </div>
 
       {/* 2. Search Toolbar */}

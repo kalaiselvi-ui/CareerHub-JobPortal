@@ -12,87 +12,12 @@ import {
   Trash2,
   UserX,
 } from "lucide-react";
+import { useALLUsers } from "../../../hooks/useUser.ts";
+import type { UserRole, UserStatus } from "../../../type/user.type.ts";
+import DashboardHeader from "../../../components/dashboard/common/DashboardHeader.tsx";
+import StatCard from "../../../components/dashboard/common/StatCard.tsx";
 
 // --- Types ---
-export type UserRole = "admin" | "recruiter" | "candidate";
-export type UserStatus = "active" | "inactive";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-  status: UserStatus;
-  joinedAt: string;
-}
-
-// --- Mock Data ---
-const mockUsers: User[] = [
-  {
-    id: "1",
-    name: "John Anderson",
-    email: "john.anderson@example.com",
-    role: "candidate",
-    status: "active",
-    joinedAt: "2026-07-28",
-  },
-  {
-    id: "2",
-    name: "Sarah Williams",
-    email: "sarah.williams@example.com",
-    role: "recruiter",
-    status: "active",
-    joinedAt: "2026-07-24",
-  },
-  {
-    id: "3",
-    name: "Michael Brown",
-    email: "michael.brown@example.com",
-    role: "candidate",
-    status: "inactive",
-    joinedAt: "2026-07-20",
-  },
-  {
-    id: "4",
-    name: "Emily Davis",
-    email: "emily.davis@example.com",
-    role: "recruiter",
-    status: "active",
-    joinedAt: "2026-07-18",
-  },
-  {
-    id: "5",
-    name: "Admin User",
-    email: "admin@careerhub.com",
-    role: "admin",
-    status: "active",
-    joinedAt: "2026-07-10",
-  },
-  {
-    id: "6",
-    name: "Daniel Wilson",
-    email: "daniel.wilson@example.com",
-    role: "candidate",
-    status: "active",
-    joinedAt: "2026-07-08",
-  },
-  {
-    id: "7",
-    name: "Sophia Miller",
-    email: "sophia.miller@example.com",
-    role: "candidate",
-    status: "active",
-    joinedAt: "2026-07-05",
-  },
-  {
-    id: "8",
-    name: "James Taylor",
-    email: "james.taylor@example.com",
-    role: "recruiter",
-    status: "inactive",
-    joinedAt: "2026-06-30",
-  },
-];
 
 // Role configuration for badges
 const roleConfig: Record<
@@ -118,17 +43,17 @@ const roleConfig: Record<
 
 export default function ManageUsers() {
   // Local state for UI
-  const [users, setUsers] = useState<User[]>(mockUsers);
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState<"all" | UserRole>("all");
   const [statusFilter, setStatusFilter] = useState<"all" | UserStatus>("all");
   const [activeMenuId, setActiveMenuId] = useState<string | null>(null);
+  const { data: users = [] } = useALLUsers();
 
   // --- Filtering with useMemo ---
   const filteredUsers = useMemo(() => {
     return users.filter((user) => {
       const matchesSearch =
-        user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         user.email.toLowerCase().includes(searchQuery.toLowerCase());
 
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
@@ -157,43 +82,78 @@ export default function ManageUsers() {
     });
   };
 
+  const userStats = [
+    {
+      title: "Total Users",
+      value: 156,
+      icon: Users,
+      iconBgColor: "bg-blue-50",
+      iconColor: "text-blue-600",
+    },
+    {
+      title: "Admins",
+      value: 4,
+      icon: ShieldCheck,
+      iconBgColor: "bg-purple-50",
+      iconColor: "text-purple-600",
+    },
+    {
+      title: "Recruiters",
+      value: 32,
+      icon: BriefcaseBusiness,
+      iconBgColor: "bg-indigo-50",
+      iconColor: "text-indigo-600",
+    },
+    {
+      title: "Job Seekers",
+      value: 120,
+      icon: UserX,
+      iconBgColor: "bg-emerald-50",
+      iconColor: "text-emerald-600",
+    },
+  ];
+
   // UI Action Handlers (local state modifications)
   const toggleUserStatus = (id: string) => {
-    setUsers((prev) =>
-      prev.map((user) =>
-        user.id === id
-          ? {
-              ...user,
-              status: user.status === "active" ? "inactive" : "active",
-            }
-          : user,
-      ),
-    );
+    // setUsers((prev) =>
+    //   prev.map((user) =>
+    //     user.id === id
+    //       ? {
+    //           ...user,
+    //           status: user.status === "active" ? "inactive" : "active",
+    //         }
+    //       : user,
+    //   ),
+    // );
     setActiveMenuId(null);
   };
 
-  const handleDeleteUser = (id: string) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
-    setActiveMenuId(null);
-  };
+  // const handleDeleteUser = (id: string) => {
+  //   setUsers((prev) => prev.filter((user) => user.id !== id));
+  //   setActiveMenuId(null);
+  // };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* 1. Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-surface-dark">Manage Users</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Manage candidates, recruiters, and administrators available on the
-            platform.
-          </p>
-        </div>
-        <div className="inline-flex items-center gap-2 px-3.5 py-2 bg-white border border-border-subtle rounded-lg text-sm text-gray-600 shadow-xs self-start sm:self-auto">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center  gap-4">
+        <DashboardHeader
+          title="Manage Users"
+          description="View, manage roles, and monitor user accounts across the platform."
+        />
+        <div className="inline-flex w-fit items-center gap-2 px-3.5 py-2 bg-white border border-border-subtle rounded-lg text-sm text-gray-600 shadow-xs self-start sm:self-auto">
           <Users className="w-4 h-4 text-primary" />
           <span className="font-medium text-surface-dark">
             {users.length} Total Users
           </span>
         </div>
+      </div>
+
+      {/* Reused StatCards Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {userStats.map((stat, i) => (
+          <StatCard key={i} {...stat} />
+        ))}
       </div>
 
       {/* 2. Search and Filter Toolbar */}
@@ -256,22 +216,22 @@ export default function ManageUsers() {
                 filteredUsers.map((user) => {
                   const roleItem = roleConfig[user.role];
                   const RoleIcon = roleItem.icon;
-                  const isMenuOpen = activeMenuId === user.id;
+                  const isMenuOpen = activeMenuId === user._id;
 
                   return (
                     <tr
-                      key={user.id}
+                      key={user._id}
                       className="hover:bg-surface-light/50 transition-colors"
                     >
                       {/* User Info / Avatar */}
                       <td className="py-3.5 px-5">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-semibold text-xs shrink-0 border border-primary/20">
-                            {getInitials(user.name)}
+                            {getInitials(user.fullName)}
                           </div>
                           <div className="min-w-0">
                             <p className="font-semibold text-gray-900 truncate">
-                              {user.name}
+                              {user.fullName}
                             </p>
                             <p className="text-xs text-gray-500 truncate">
                               {user.email}
@@ -305,7 +265,7 @@ export default function ManageUsers() {
 
                       {/* Joined Date */}
                       <td className="py-3.5 px-5 text-gray-500 text-xs hidden sm:table-cell">
-                        {formatDate(user.joinedAt)}
+                        {formatDate(user.createdAt)}
                       </td>
 
                       {/* Action Dropdown Menu */}
@@ -313,7 +273,7 @@ export default function ManageUsers() {
                         <button
                           type="button"
                           onClick={() =>
-                            setActiveMenuId(isMenuOpen ? null : user.id)
+                            setActiveMenuId(isMenuOpen ? null : user._id)
                           }
                           className="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
                         >
@@ -343,7 +303,7 @@ export default function ManageUsers() {
                                 Edit User
                               </button>
                               <button
-                                onClick={() => toggleUserStatus(user.id)}
+                                onClick={() => toggleUserStatus(user._id)}
                                 className="w-full px-3 py-2 text-gray-700 hover:bg-surface-light flex items-center gap-2"
                               >
                                 {user.status === "active" ? (
@@ -359,10 +319,7 @@ export default function ManageUsers() {
                                 )}
                               </button>
                               <div className="my-1 border-t border-border-subtle" />
-                              <button
-                                onClick={() => handleDeleteUser(user.id)}
-                                className="w-full px-3 py-2 text-red-600 hover:bg-red-50 flex items-center gap-2"
-                              >
+                              <button className="w-full px-3 py-2 text-red-600 hover:bg-red-50 flex items-center gap-2">
                                 <Trash2 className="w-3.5 h-3.5 text-red-500" />
                                 Delete User
                               </button>

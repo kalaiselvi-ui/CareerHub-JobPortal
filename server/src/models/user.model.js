@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       type: Date,
     },
     phone: {
-      type: Number,
+      type: String,
       trim: true,
     },
     profileImage: {
