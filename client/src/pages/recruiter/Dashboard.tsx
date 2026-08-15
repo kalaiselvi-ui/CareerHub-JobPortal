@@ -3,10 +3,6 @@ import {
   Plus,
   Briefcase,
   BriefcaseBusiness,
-  Eye,
-  Pencil,
-  Trash2,
-  ChevronRight,
   FolderOpen,
   CheckCircle2,
   UserCheck,
@@ -20,6 +16,14 @@ import WelcomeSection from "../../components/dashboard/common/WelcomeSection.tsx
 import { useAuthStore } from "../../store/authStore.ts";
 import StatCard from "../../components/dashboard/common/StatCard.tsx";
 import QuickActionButton from "../../components/dashboard/common/QuickActionButton.tsx";
+import { DeleteModal } from "../../components/DeleteModal.tsx";
+import type { DetailedJob, JobProps } from "../../type/job.type.ts";
+import toast from "react-hot-toast";
+import { useMyJobs } from "../../hooks/useJob.ts";
+import { useNavigate } from "react-router-dom";
+import { jobMutation } from "../../mutations/jobMutation.ts";
+import StatusBadge from "../../components/dashboard/common/StatusBadge.tsx";
+import JobsTable from "../../components/dashboard/common/JobsTable.tsx";
 
 // ==========================================
 // 1. TypeScript Types & Interfaces
@@ -28,16 +32,6 @@ import QuickActionButton from "../../components/dashboard/common/QuickActionButt
 export type Recruiter = {
   id: string;
   fullName: string;
-};
-
-export type RecruiterJob = {
-  id: string;
-  title: string;
-  location: string;
-  jobType: string;
-  status: "active" | "closed" | "draft";
-  applications: number;
-  createdAt: string;
 };
 
 export type Application = {
@@ -51,59 +45,6 @@ export type Application = {
 // ==========================================
 // 2. Mock Data
 // ==========================================
-
-const mockRecruiter: Recruiter = {
-  id: "r1",
-  fullName: "John",
-};
-
-const mockJobs: RecruiterJob[] = [
-  {
-    id: "job-1",
-    title: "Frontend Developer",
-    location: "Remote / Dubai, UAE",
-    jobType: "Full-time",
-    status: "active",
-    applications: 12,
-    createdAt: "Aug 12, 2026",
-  },
-  {
-    id: "job-2",
-    title: "Backend Developer",
-    location: "Abu Dhabi, UAE",
-    jobType: "Full-time",
-    status: "active",
-    applications: 8,
-    createdAt: "Aug 10, 2026",
-  },
-  {
-    id: "job-3",
-    title: "React JS Developer",
-    location: "Sharjah, UAE",
-    jobType: "Contract",
-    status: "draft",
-    applications: 0,
-    createdAt: "Aug 08, 2026",
-  },
-  {
-    id: "job-4",
-    title: "UI/UX Designer",
-    location: "Remote",
-    jobType: "Full-time",
-    status: "closed",
-    applications: 25,
-    createdAt: "Aug 05, 2026",
-  },
-  {
-    id: "job-5",
-    title: "Full Stack Developer",
-    location: "Dubai, UAE",
-    jobType: "Full-time",
-    status: "active",
-    applications: 19,
-    createdAt: "Aug 01, 2026",
-  },
-];
 
 const mockApplications: Application[] = [
   {
@@ -213,122 +154,6 @@ export const recruiterActions = [
   },
 ];
 
-const JobStatusBadge: React.FC<{ status: RecruiterJob["status"] }> = ({
-  status,
-}) => {
-  const styles = {
-    active: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    closed: "bg-gray-100 text-gray-700 border-gray-200",
-    draft: "bg-amber-50 text-amber-700 border-amber-200",
-  };
-
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${styles[status]}`}
-    >
-      {status}
-    </span>
-  );
-};
-
-const RecentJobs: React.FC<{ jobs: RecruiterJob[] }> = ({ jobs }) => (
-  <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-    <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-      <h3 className="text-base font-semibold text-gray-900">Recent Jobs</h3>
-      <button className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1">
-        View All <ChevronRight className="h-4 w-4" />
-      </button>
-    </div>
-    <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm text-gray-600">
-        <thead className="bg-gray-50/80 text-xs uppercase text-gray-500 border-b border-gray-200">
-          <tr>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Job Title
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Location
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Job Type
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Applications
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Posted Date
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold text-right">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {jobs.map((job) => (
-            <tr key={job.id} className="hover:bg-gray-50/50 transition-colors">
-              <td className="px-6 py-4 font-medium text-gray-900">
-                {job.title}
-              </td>
-              <td className="px-6 py-4 text-gray-500">{job.location}</td>
-              <td className="px-6 py-4 text-gray-500">{job.jobType}</td>
-              <td className="px-6 py-4">
-                <JobStatusBadge status={job.status} />
-              </td>
-              <td className="px-6 py-4 font-semibold text-gray-900">
-                {job.applications}
-              </td>
-              <td className="px-6 py-4 text-gray-500">{job.createdAt}</td>
-              <td className="px-6 py-4 text-right">
-                <div className="flex items-center justify-end gap-2">
-                  <button
-                    title="View"
-                    className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                  <button
-                    title="Edit"
-                    className="p-1 text-gray-400 hover:text-emerald-600 transition-colors"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                  <button
-                    title="Delete"
-                    className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
-
-const ApplicationStatusBadge: React.FC<{ status: Application["status"] }> = ({
-  status,
-}) => {
-  const styles = {
-    pending: "bg-amber-50 text-amber-700 border-amber-200",
-    shortlisted: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    rejected: "bg-red-50 text-red-700 border-red-200",
-  };
-
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium capitalize ${styles[status]}`}
-    >
-      {status}
-    </span>
-  );
-};
-
 const RecentApplications: React.FC<{ applications: Application[] }> = ({
   applications,
 }) => (
@@ -368,7 +193,7 @@ const RecentApplications: React.FC<{ applications: Application[] }> = ({
               <td className="px-6 py-4 text-gray-500">{app.jobTitle}</td>
               <td className="px-6 py-4 text-gray-500">{app.appliedDate}</td>
               <td className="px-6 py-4">
-                <ApplicationStatusBadge status={app.status} />
+                <StatusBadge status={app.status} />
               </td>
               <td className="px-6 py-4 text-right">
                 <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
@@ -418,10 +243,35 @@ const EmptyStateSection: React.FC<{ onPostJob?: () => void }> = ({
 // ==========================================
 
 export default function RecruiterDashboard() {
-  // Toggle this flag to test or enable the empty state UI when needed
-  const [hasNoJobs] = useState<boolean>(false);
   const { user } = useAuthStore();
+  const [deletingJob, setDeletingJob] = useState<DetailedJob | JobProps | null>(
+    null,
+  );
+  const { deleteJobMutation } = jobMutation();
 
+  const { data: recruiterJobs = [], isLoading, isError } = useMyJobs();
+  const navigate = useNavigate();
+
+  if (isLoading) {
+    return <div>Loading jobs...</div>;
+  }
+
+  if (isError) {
+    return <div>Failed to load jobs.</div>;
+  }
+
+  const handleConfirmDelete = () => {
+    if (!deletingJob) return;
+    deleteJobMutation.mutate(deletingJob._id, {
+      onSuccess: () => {
+        toast.success("Deleted Successfully");
+        setDeletingJob(null);
+      },
+      onError: (error) => {
+        toast.error(error.message || "failed to delete");
+      },
+    });
+  };
   return (
     <div className="min-h-screen bg-gray-50/50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -463,15 +313,28 @@ export default function RecruiterDashboard() {
             ))}
           </div>
         </div>
-        {hasNoJobs ? (
-          <EmptyStateSection />
+        {recruiterJobs.length === 0 ? (
+          <EmptyStateSection onPostJob={() => navigate("/jobs/create")} />
         ) : (
           <>
-            <RecentJobs jobs={mockJobs} />
-            <RecentApplications applications={mockApplications} />
+            {/* <RecentJobs jobs={mockJobs} /> */}
+            <JobsTable
+              jobs={recruiterJobs}
+              role="recruiter"
+              onNavigate={navigate}
+              onDelete={(job) => setDeletingJob(job)}
+            />
           </>
         )}
+        <RecentApplications applications={mockApplications} />
       </div>
+      <DeleteModal
+        isOpen={Boolean(deletingJob)}
+        itemName={deletingJob?.title || ""}
+        itemType="Job"
+        onClose={() => setDeletingJob(null)}
+        onConfirm={handleConfirmDelete}
+      />
     </div>
   );
 }

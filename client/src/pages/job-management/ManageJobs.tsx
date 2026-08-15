@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
-  Plus,
   Search,
   MapPin,
   Eye,
@@ -9,8 +8,6 @@ import {
   Trash2,
   Briefcase,
   CheckCircle2,
-  FileEdit,
-  XCircle,
   RotateCcw,
   AlertTriangle,
   X,
@@ -21,15 +18,14 @@ import {
   FileText,
   Archive,
 } from "lucide-react";
-import { useJobs } from "../../hooks/useJob.ts";
+import { useJobs, useMyJobs } from "../../hooks/useJob.ts";
 import type { DetailedJob, JobProps } from "../../type/job.type.ts";
-import type { User } from "../../store/authStore.ts";
-import { SummaryCard } from "../../components/SummaryCard.tsx";
 import { jobMutation } from "../../mutations/jobMutation.ts";
 import toast from "react-hot-toast";
 import { DeleteModal } from "../../components/DeleteModal.tsx";
 import DashboardHeader from "../../components/dashboard/common/DashboardHeader.tsx";
 import StatCard from "../../components/dashboard/common/StatCard.tsx";
+import { useAuthStore } from "../../store/authStore.ts";
 
 export interface FilterState {
   search: string;
@@ -67,14 +63,29 @@ const StatusBadge: React.FC<{ status: JobProps["status"] | string }> = ({
 // --- Main Page Component ---
 
 export const ManageJobs: React.FC = () => {
-  //   const role: "admin" | "recruiter" = "admin";
-  const role = "admin" as User["role"]; // or "admin" as "admin" | "recruiter" | "candidate";
   // Fetch data via hook
-  const { data: rawJobs = [], isLoading, isError } = useJobs();
 
   // Local state to track visually deleted IDs prior to API hook integration
   const [deletedIds] = useState<string[]>([]);
   const { deleteJobMutation } = jobMutation();
+  const { user } = useAuthStore();
+  const isAdmin = user?.role === "admin";
+
+  const allJobsQuery = useJobs();
+  const myJobsQuery = useMyJobs();
+  // const { data: rawJobs = [], isLoading, isError } = useJobs();
+
+  const activeQuery = isAdmin ? allJobsQuery : myJobsQuery;
+  const rawData = activeQuery.data;
+  const isLoading = activeQuery.isLoading;
+  const isError = activeQuery.isError;
+
+  const rawJobs: DetailedJob[] = useMemo(() => {
+    if (!rawData) return [];
+    if (Array.isArray(rawData)) return rawData;
+    if (Array.isArray((rawData as any).data)) return (rawData as any).data;
+    return [];
+  }, [rawData]);
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -87,16 +98,9 @@ export const ManageJobs: React.FC = () => {
     null,
   );
 
-  // Filter active (non-deleted) jobs
-  const jobs = useMemo(() => {
-    return (rawJobs as DetailedJob[]).filter(
-      (job) => !deletedIds.includes(job._id),
-    );
-  }, [rawJobs, deletedIds]);
-
   // Derived filtered jobs based on user selection
   const filteredJobs = useMemo(() => {
-    return jobs.filter((job) => {
+    return rawJobs.filter((job) => {
       const matchesSearch =
         job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
         job.company.toLowerCase().includes(filters.search.toLowerCase());
@@ -118,17 +122,7 @@ export const ManageJobs: React.FC = () => {
         matchesSearch && matchesStatus && matchesJobType && matchesWorkMode
       );
     });
-  }, [jobs, filters]);
-
-  // Dynamic summary metrics
-  const stats = useMemo(() => {
-    return {
-      total: jobs.length,
-      active: jobs.filter((j) => j.status.toLowerCase() === "active").length,
-      draft: jobs.filter((j) => j.status.toLowerCase() === "draft").length,
-      closed: jobs.filter((j) => j.status.toLowerCase() === "closed").length,
-    };
-  }, [jobs]);
+  }, [rawJobs, filters]);
 
   const jobStats = [
     {
@@ -533,18 +527,3 @@ export const ManageJobs: React.FC = () => {
 };
 
 export default ManageJobs;
-
-// <DeleteModal
-//   isOpen={Boolean(deletingCategory)}
-//   itemName={deletingCategory?.name || ""}
-//   itemType="Category"
-//   onClose={() => setDeletingCategory(null)}
-//   onConfirm={handleConfirmDelete}
-// />
-// <DeleteModal
-//   isOpen={Boolean(deletingUser)}
-//   itemName={deletingUser?.fullName || ""}
-//   itemType="User"
-//   onClose={() => setDeletingUser(null)}
-//   onConfirm={handleConfirmDelete}
-// />

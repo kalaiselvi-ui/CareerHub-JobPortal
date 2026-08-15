@@ -126,7 +126,7 @@ export const CreateJob = () => {
         {/* About Company */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
-            About Company <span className="text-red-500">*</span>
+            About Company
           </label>
           <textarea
             {...register("aboutCompany")}

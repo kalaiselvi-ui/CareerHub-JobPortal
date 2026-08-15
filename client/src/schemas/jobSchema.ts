@@ -15,7 +15,7 @@ const lineToArray = z.preprocess((val) => {
 export const jobSchema = z.object({
   title: z.string().min(3, "Job title must be at least 3 characters"),
   company: z.string().min(1, "Company name is required"),
-  aboutCompany: z.string().min(10, "About company is required"),
+  aboutCompany: z.string().optional(),
   category: z.string().min(1, "Please select a category"),
   location: z.string().min(1, "Location is required"),
   jobType: z.enum(["full-time", "part-time", "contract"]),
@@ -41,7 +41,8 @@ export const jobSchema = z.object({
     max: z.coerce.number().min(0),
     period: z.enum(["month", "year"]),
   }),
-  skills: z.array(z.string()).min(1, "Add at least one required skill"),
+  // skills: z.array(z.string()).min(1, "Add at least one required skill"),
+  skills: z.array(z.string()).default([]),
   applicationDeadline: z.string().min(1, "Application deadline is required"),
   status: z.enum(["active", "closed", "draft"]),
 });

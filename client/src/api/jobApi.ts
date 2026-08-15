@@ -32,3 +32,9 @@ export const getJobById = async (id: string) => {
   const response = await axiosInstance.get(`/api/jobs/${id}`);
   return response.data.data;
 };
+
+// Added getMyJobs API function
+export const getMyJobs = async (): Promise<DetailedJob[]> => {
+  const response = await axiosInstance.get("/api/jobs/my-jobs");
+  return response.data.data;
+};

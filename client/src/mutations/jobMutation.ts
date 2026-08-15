@@ -10,6 +10,7 @@ export const jobMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ["jobs"],
       });
+      queryClient.invalidateQueries({ queryKey: ["my-jobs"] });
     },
   });
   const deleteJobMutation = useMutation({
@@ -18,6 +19,7 @@ export const jobMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ["jobs"],
       });
+      queryClient.invalidateQueries({ queryKey: ["my-jobs"] });
     },
   });
 
@@ -27,6 +29,7 @@ export const jobMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ["jobs"],
       });
+      queryClient.invalidateQueries({ queryKey: ["my-jobs"] });
     },
   });
   return {
