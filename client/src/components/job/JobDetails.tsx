@@ -11,6 +11,7 @@ import {
 import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
 import { formatDeadline } from "../../utils/formatDeadline.ts";
+import { useNavigate } from "react-router-dom";
 
 interface JobDetailsProps {
   job: DetailedJob | null;
@@ -35,6 +36,15 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
       </div>
     );
   }
+  const navigate = useNavigate();
+
+  // 2. Helper handler to navigate to the apply page
+  const handleApply = () => {
+    const jobId = job._id;
+    if (jobId) {
+      navigate(`/jobs/${jobId}/apply`);
+    }
+  };
 
   return (
     <div className="h-full bg-white border border-border-subtle rounded-2xl p-6 lg:p-8 overflow-y-auto space-y-8">
@@ -99,7 +109,10 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
 
         {/* Action Buttons */}
         <div className="flex items-center gap-3 pt-2">
-          <button className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md shadow-primary/20 cursor-pointer">
+          <button
+            onClick={handleApply}
+            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md shadow-primary/20 cursor-pointer"
+          >
             <Send className="w-4 h-4" />
             <span>Apply Now</span>
           </button>

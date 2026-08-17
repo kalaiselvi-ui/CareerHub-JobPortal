@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import {
-  Plus,
   Briefcase,
   BriefcaseBusiness,
-  FolderOpen,
   CheckCircle2,
   UserCheck,
   FileText,
@@ -24,6 +22,9 @@ import { useNavigate } from "react-router-dom";
 import { jobMutation } from "../../mutations/jobMutation.ts";
 import StatusBadge from "../../components/dashboard/common/StatusBadge.tsx";
 import JobsTable from "../../components/dashboard/common/JobsTable.tsx";
+import EmptyState from "../../components/dashboard/common/EmptyState.tsx";
+import ApplicationTable from "../../components/dashboard/common/ApplicationTable.tsx";
+import { useMyApplications } from "../../hooks/useApplication.ts";
 
 // ==========================================
 // 1. TypeScript Types & Interfaces
@@ -154,90 +155,6 @@ export const recruiterActions = [
   },
 ];
 
-const RecentApplications: React.FC<{ applications: Application[] }> = ({
-  applications,
-}) => (
-  <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
-    <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-      <h3 className="text-base font-semibold text-gray-900">
-        Recent Applications
-      </h3>
-    </div>
-    <div className="overflow-x-auto">
-      <table className="w-full text-left text-sm text-gray-600">
-        <thead className="bg-gray-50/80 text-xs uppercase text-gray-500 border-b border-gray-200">
-          <tr>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Candidate
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Job Title
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Applied Date
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold">
-              Status
-            </th>
-            <th scope="col" className="px-6 py-3 font-semibold text-right">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200">
-          {applications.map((app) => (
-            <tr key={app.id} className="hover:bg-gray-50/50 transition-colors">
-              <td className="px-6 py-4 font-medium text-gray-900">
-                {app.candidateName}
-              </td>
-              <td className="px-6 py-4 text-gray-500">{app.jobTitle}</td>
-              <td className="px-6 py-4 text-gray-500">{app.appliedDate}</td>
-              <td className="px-6 py-4">
-                <StatusBadge status={app.status} />
-              </td>
-              <td className="px-6 py-4 text-right">
-                <button className="text-xs font-semibold text-blue-600 hover:text-blue-800">
-                  Review
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-    <div className="border-t border-gray-200 bg-gray-50/50 px-6 py-3 text-center">
-      <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-        View All Applications
-      </button>
-    </div>
-  </div>
-);
-
-const EmptyStateSection: React.FC<{ onPostJob?: () => void }> = ({
-  onPostJob,
-}) => (
-  <div className="rounded-xl border border-dashed border-gray-300 bg-white p-12 text-center shadow-sm">
-    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-      <FolderOpen className="h-6 w-6" />
-    </div>
-    <h3 className="mt-4 text-base font-semibold text-gray-900">
-      You haven't posted any jobs yet.
-    </h3>
-    <p className="mt-1 text-sm text-gray-500">
-      Start attracting candidates by creating your first job posting.
-    </p>
-    <div className="mt-6">
-      <button
-        onClick={onPostJob}
-        className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 transition-colors"
-      >
-        <Plus className="h-4 w-4" />
-        <span>Post Your First Job</span>
-      </button>
-    </div>
-  </div>
-);
-
 // ==========================================
 // 4. Main Recruiter Dashboard Component
 // ==========================================
@@ -251,6 +168,11 @@ export default function RecruiterDashboard() {
 
   const { data: recruiterJobs = [], isLoading, isError } = useMyJobs();
   const navigate = useNavigate();
+  const {
+    data: applications = [],
+    isLoading: applicationLoading,
+    isError: applicationError,
+  } = useMyApplications();
 
   if (isLoading) {
     return <div>Loading jobs...</div>;
@@ -258,6 +180,13 @@ export default function RecruiterDashboard() {
 
   if (isError) {
     return <div>Failed to load jobs.</div>;
+  }
+  if (applicationLoading) {
+    return <div>Loading applications...</div>;
+  }
+
+  if (applicationError) {
+    return <div>Failed to load applications.</div>;
   }
 
   const handleConfirmDelete = () => {
@@ -281,14 +210,12 @@ export default function RecruiterDashboard() {
           buttonText="Post New Job"
           buttonLink="/jobs/create"
         />
-
         <WelcomeSection
           userName={
             user?.fullName ? `${user.fullName} (Recruiter)` : "Recruiter"
           }
           roleDescription="Here's an overview of your platform and recruitment activity."
         />
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {recruiterStats.map((stat, index) => (
             <StatCard
@@ -301,7 +228,6 @@ export default function RecruiterDashboard() {
             />
           ))}
         </div>
-
         {/* 5. Quick Actions Section */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-surface-dark">
@@ -314,7 +240,7 @@ export default function RecruiterDashboard() {
           </div>
         </div>
         {recruiterJobs.length === 0 ? (
-          <EmptyStateSection onPostJob={() => navigate("/jobs/create")} />
+          <EmptyState onAction={() => navigate("/jobs/create")} />
         ) : (
           <>
             {/* <RecentJobs jobs={mockJobs} /> */}
@@ -326,7 +252,12 @@ export default function RecruiterDashboard() {
             />
           </>
         )}
-        <RecentApplications applications={mockApplications} />
+        <ApplicationTable
+          applications={applications}
+          onNavigate={(path) => navigate(path)}
+          onReview={(app) => navigate(`/applications/${app._id}`)}
+          maxItems={5}
+        />{" "}
       </div>
       <DeleteModal
         isOpen={Boolean(deletingJob)}

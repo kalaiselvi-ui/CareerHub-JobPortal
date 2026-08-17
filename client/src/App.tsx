@@ -18,6 +18,7 @@ import ManageUsers from "./pages/admin/user/ManageUsers.tsx";
 import AdminProfile from "./pages/admin/Profile.tsx";
 import RecruiterDashboard from "./pages/recruiter/Dashboard.tsx";
 import MyJobsPage from "./pages/recruiter/MyJobs.tsx";
+import ApplyJobPage from "./components/application/ApplyJob.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -63,6 +64,7 @@ const App = () => {
                 element={<RecruiterDashboard />}
               />
               <Route path="/recruiter/jobs" element={<MyJobsPage />} />
+              <Route path="/jobs/:id/apply" element={<ApplyJobPage />} />
             </Route>
 
             <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
