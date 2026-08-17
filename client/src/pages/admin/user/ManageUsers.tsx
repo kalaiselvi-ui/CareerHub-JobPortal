@@ -113,26 +113,6 @@ export default function ManageUsers() {
     },
   ];
 
-  // UI Action Handlers (local state modifications)
-  const toggleUserStatus = (id: string) => {
-    // setUsers((prev) =>
-    //   prev.map((user) =>
-    //     user.id === id
-    //       ? {
-    //           ...user,
-    //           status: user.status === "active" ? "inactive" : "active",
-    //         }
-    //       : user,
-    //   ),
-    // );
-    setActiveMenuId(null);
-  };
-
-  // const handleDeleteUser = (id: string) => {
-  //   setUsers((prev) => prev.filter((user) => user.id !== id));
-  //   setActiveMenuId(null);
-  // };
-
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       {/* 1. Page Header */}
@@ -302,10 +282,7 @@ export default function ManageUsers() {
                                 <Pencil className="w-3.5 h-3.5 text-gray-400" />
                                 Edit User
                               </button>
-                              <button
-                                onClick={() => toggleUserStatus(user._id)}
-                                className="w-full px-3 py-2 text-gray-700 hover:bg-surface-light flex items-center gap-2"
-                              >
+                              <button className="w-full px-3 py-2 text-gray-700 hover:bg-surface-light flex items-center gap-2">
                                 {user.status === "active" ? (
                                   <>
                                     <UserX className="w-3.5 h-3.5 text-amber-500" />

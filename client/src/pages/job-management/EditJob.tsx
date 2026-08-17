@@ -11,7 +11,7 @@ import {
 } from "../../schemas/jobSchema";
 import { jobMutation } from "../../mutations/jobMutation";
 import { useCategories } from "../../hooks/useCategories.ts";
-import { useJobById, useJobs } from "../../hooks/useJob.ts"; // Replace with your actual hook for fetching single job
+import { useJobById } from "../../hooks/useJob.ts"; // Replace with your actual hook for fetching single job
 
 interface EditJobProps {
   jobId?: string;

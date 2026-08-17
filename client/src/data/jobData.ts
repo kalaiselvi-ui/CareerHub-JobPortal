@@ -1,5 +1,3 @@
-import type { DetailedJob } from "../type/job.type.ts";
-
 const JobData = [
   {
     title: "Senior Full Stack Engineer",

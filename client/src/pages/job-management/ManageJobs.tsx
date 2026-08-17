@@ -10,7 +10,6 @@ import {
   CheckCircle2,
   RotateCcw,
   AlertTriangle,
-  X,
   Building2,
   Clock,
   FilterX,
@@ -63,17 +62,12 @@ const StatusBadge: React.FC<{ status: JobProps["status"] | string }> = ({
 // --- Main Page Component ---
 
 export const ManageJobs: React.FC = () => {
-  // Fetch data via hook
-
-  // Local state to track visually deleted IDs prior to API hook integration
-  const [deletedIds] = useState<string[]>([]);
   const { deleteJobMutation } = jobMutation();
   const { user } = useAuthStore();
   const isAdmin = user?.role === "admin";
 
   const allJobsQuery = useJobs();
   const myJobsQuery = useMyJobs();
-  // const { data: rawJobs = [], isLoading, isError } = useJobs();
 
   const activeQuery = isAdmin ? allJobsQuery : myJobsQuery;
   const rawData = activeQuery.data;

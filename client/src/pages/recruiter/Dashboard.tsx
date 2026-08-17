@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Briefcase,
   BriefcaseBusiness,
@@ -20,7 +20,6 @@ import toast from "react-hot-toast";
 import { useMyJobs } from "../../hooks/useJob.ts";
 import { useNavigate } from "react-router-dom";
 import { jobMutation } from "../../mutations/jobMutation.ts";
-import StatusBadge from "../../components/dashboard/common/StatusBadge.tsx";
 import JobsTable from "../../components/dashboard/common/JobsTable.tsx";
 import EmptyState from "../../components/dashboard/common/EmptyState.tsx";
 import ApplicationTable from "../../components/dashboard/common/ApplicationTable.tsx";
@@ -42,48 +41,6 @@ export type Application = {
   appliedDate: string;
   status: "pending" | "shortlisted" | "rejected";
 };
-
-// ==========================================
-// 2. Mock Data
-// ==========================================
-
-const mockApplications: Application[] = [
-  {
-    id: "app-1",
-    candidateName: "Sarah Wilson",
-    jobTitle: "Frontend Developer",
-    appliedDate: "Aug 13, 2026",
-    status: "pending",
-  },
-  {
-    id: "app-2",
-    candidateName: "Ahmed Khan",
-    jobTitle: "Backend Developer",
-    appliedDate: "Aug 12, 2026",
-    status: "shortlisted",
-  },
-  {
-    id: "app-3",
-    candidateName: "David Thomas",
-    jobTitle: "UI/UX Designer",
-    appliedDate: "Aug 11, 2026",
-    status: "rejected",
-  },
-  {
-    id: "app-4",
-    candidateName: "Maria Joseph",
-    jobTitle: "Frontend Developer",
-    appliedDate: "Aug 10, 2026",
-    status: "shortlisted",
-  },
-  {
-    id: "app-5",
-    candidateName: "James Miller",
-    jobTitle: "Full Stack Developer",
-    appliedDate: "Aug 09, 2026",
-    status: "pending",
-  },
-];
 
 const recruiterStats = [
   {
