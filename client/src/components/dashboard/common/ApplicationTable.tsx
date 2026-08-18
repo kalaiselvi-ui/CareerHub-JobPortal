@@ -7,16 +7,17 @@ export type ApplicationStatus =
   | "reviewed"
   | "shortlisted"
   | "rejected"
-  | "accepted"
   | string;
 
 export interface ApplicationProps {
   _id?: string;
   id?: string;
-  candidateName: string;
+  candidateName?: string;
   candidateEmail?: string;
-  jobTitle: string;
-  appliedDate: string;
+  company?: string;
+  jobTitle?: string;
+  title?: string;
+  appliedDate?: string;
   status: ApplicationStatus;
 }
 

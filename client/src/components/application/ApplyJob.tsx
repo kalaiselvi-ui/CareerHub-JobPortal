@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Upload, Send, ArrowLeft, Loader2 } from "lucide-react";
-import axios from "axios";
+import { applicationMutation } from "../../mutations/applicationMutation.ts";
+import toast from "react-hot-toast";
 
 export const ApplyJobPage: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();
@@ -9,8 +10,8 @@ export const ApplyJobPage: React.FC = () => {
 
   const [resume, setResume] = useState<File | null>(null);
   const [coverLetter, setCoverLetter] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { createApplicationMutation } = applicationMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,28 +20,27 @@ export const ApplyJobPage: React.FC = () => {
       return;
     }
 
-    try {
-      setLoading(true);
-      setError("");
-
-      const formData = new FormData();
-      formData.append("resume", resume);
-      formData.append("coverLetter", coverLetter);
-
-      await axios.post(`/api/applications/${jobId}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      // Redirect candidate to their applications list upon success
-      navigate("/my-applications");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to submit application.");
-    } finally {
-      setLoading(false);
+    if (!jobId) {
+      setError("Job ID is missing.");
+      return;
     }
+    const formData = new FormData();
+    formData.append("resume", resume);
+    formData.append("coverLetter", coverLetter);
+    createApplicationMutation.mutate(
+      { jobId: jobId!, formData },
+      {
+        onSuccess: () => {
+          toast.success("Application submitted successfully!");
+          navigate("/candidate/my-applications");
+        },
+        onError: (error: any) => {
+          setError(
+            error.response?.data?.message || "Failed to submit application.",
+          );
+        },
+      },
+    );
   };
 
   return (
@@ -116,10 +116,10 @@ export const ApplyJobPage: React.FC = () => {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={createApplicationMutation.isPending}
               className="px-6 py-2.5 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl flex items-center gap-2 disabled:opacity-50 transition-all cursor-pointer shadow-md shadow-primary/20"
             >
-              {loading ? (
+              {createApplicationMutation.isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <>

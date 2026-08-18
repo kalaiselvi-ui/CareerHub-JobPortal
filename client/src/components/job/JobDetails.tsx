@@ -12,6 +12,7 @@ import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
 import { formatDeadline } from "../../utils/formatDeadline.ts";
 import { useNavigate } from "react-router-dom";
+import { useMyApplications } from "../../hooks/useApplication.ts";
 
 interface JobDetailsProps {
   job: DetailedJob | null;
@@ -22,6 +23,9 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
   job,
   onBackToMobileList,
 }) => {
+  const navigate = useNavigate();
+  const { data: applications = [] } = useMyApplications();
+
   if (!job) {
     return (
       <div className="h-full bg-white border border-border-subtle rounded-2xl p-8 flex flex-col items-center justify-center text-center">
@@ -36,7 +40,6 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
       </div>
     );
   }
-  const navigate = useNavigate();
 
   // 2. Helper handler to navigate to the apply page
   const handleApply = () => {
@@ -45,6 +48,10 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
       navigate(`/jobs/${jobId}/apply`);
     }
   };
+
+  const hasApplied = applications.some(
+    (application) => application.jobId._id === job._id,
+  );
 
   return (
     <div className="h-full bg-white border border-border-subtle rounded-2xl p-6 lg:p-8 overflow-y-auto space-y-8">
@@ -111,10 +118,24 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
         <div className="flex items-center gap-3 pt-2">
           <button
             onClick={handleApply}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-md shadow-primary/20 cursor-pointer"
+            disabled={hasApplied}
+            className={`flex-1 sm:flex-none flex items-center justify-center gap-2 font-semibold px-6 py-3 rounded-xl transition-all ${
+              hasApplied
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-not-allowed"
+                : "bg-primary hover:bg-primary/90 text-white shadow-md shadow-primary/20 cursor-pointer"
+            }`}
           >
-            <Send className="w-4 h-4" />
-            <span>Apply Now</span>
+            {hasApplied ? (
+              <>
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Applied</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                <span>Apply Now</span>
+              </>
+            )}{" "}
           </button>
           <button className="flex items-center justify-center gap-2 border border-border-subtle hover:border-primary text-surface-dark hover:text-primary font-semibold px-4 py-3 rounded-xl transition-all bg-white cursor-pointer">
             <Bookmark className="w-4 h-4" />

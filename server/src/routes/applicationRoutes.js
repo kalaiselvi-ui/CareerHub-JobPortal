@@ -3,6 +3,7 @@ import {
   createApplication,
   getAllJobApplications,
   getApplicantsForJob,
+  getCandidateDashboardStats,
   getRecruiterApplications,
   updateStatus,
 } from "../controllers/applicationController.js";
@@ -23,6 +24,11 @@ applicationRoutes.get("/my", authMiddleware, getAllJobApplications);
 applicationRoutes.get("/recruiter", authMiddleware, getRecruiterApplications);
 
 applicationRoutes.get("/job/:id", authMiddleware, getApplicantsForJob);
+applicationRoutes.get(
+  "/candidate/stats",
+  authMiddleware,
+  getCandidateDashboardStats,
+);
 
 applicationRoutes.patch("/status/:id", authMiddleware, updateStatus);
 

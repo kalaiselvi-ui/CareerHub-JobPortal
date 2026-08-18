@@ -261,3 +261,41 @@ export const updateStatus = async (req, res) => {
     });
   }
 };
+
+export const getCandidateDashboardStats = async (req, res) => {
+  try {
+    const { id: userId, role } = req.user;
+    if (role !== "candidate") {
+      return res.status(403).json({
+        message: "Only candidates can access this dashboard",
+      });
+    }
+    const totalApplications = await Application.countDocuments({
+      userId,
+      status: "applied",
+    });
+    const pendingApplications = await Application.countDocuments({
+      userId,
+      status: "applied",
+    });
+    const shortlistedApplications = await Application.countDocuments({
+      userId,
+      status: "shortlisted",
+    });
+    const rejectedApplications = await Application.countDocuments({
+      userId,
+      status: "rejected",
+    });
+
+    res.status(200).json({
+      totalApplications,
+      pendingApplications,
+      shortlistedApplications,
+      rejectedApplications,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch dashboard stats",
+    });
+  }
+};

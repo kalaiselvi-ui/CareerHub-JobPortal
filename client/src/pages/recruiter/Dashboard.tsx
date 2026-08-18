@@ -39,7 +39,7 @@ export type Application = {
   candidateName: string;
   jobTitle: string;
   appliedDate: string;
-  status: "pending" | "shortlisted" | "rejected";
+  status: "pending" | "shortlisted" | "rejected" | "applied";
 };
 
 const recruiterStats = [

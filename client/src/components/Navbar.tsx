@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   Bookmark,
@@ -23,6 +23,23 @@ const Navbar: React.FC = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const { isAuthenticated, user, logout } = useAuthStore();
 
@@ -110,12 +127,12 @@ const Navbar: React.FC = () => {
     return [
       {
         label: "Dashboard",
-        path: "/dashboard",
+        path: "/candidate/dashboard",
         icon: LayoutDashboard,
       },
       {
         label: "Applications",
-        path: "/applications",
+        path: "/candidate/my-applications",
         icon: FileText,
       },
       {
