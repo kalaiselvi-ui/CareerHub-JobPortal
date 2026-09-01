@@ -1,4 +1,4 @@
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search } from "lucide-react";
 import { ApplicationCard } from "../../components/dashboard/common/ApplicationCard.tsx";
 import { useMyApplications } from "../../hooks/useApplication.ts";
 

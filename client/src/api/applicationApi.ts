@@ -1,5 +1,4 @@
 import type { Application } from "../components/dashboard/common/ApplicationCard.tsx";
-import type { ApplicationProps } from "../components/dashboard/common/ApplicationTable.tsx";
 import api from "./axiosInstance"; // use your existing axios instance
 
 export const createApplicationApi = async (
@@ -24,7 +23,7 @@ export const getMyApplicationsApi = async (): Promise<Application[]> => {
 export const getRecruiterApplicationsApi = async () => {
   const response = await api.get("/api/applications/recruiter");
 
-  return response.data;
+  return response.data?.data || [];
 };
 
 export const getApplicantsForJobApi = async (jobId: string) => {
@@ -35,7 +34,7 @@ export const getApplicantsForJobApi = async (jobId: string) => {
 
 export const updateApplicationStatusApi = async (
   applicationId: string,
-  status: "applied" | "shortlisted" | "rejected" | "pending",
+  status: "applied" | "shortlisted" | "rejected" | "pending" | "viewed",
 ) => {
   const response = await api.patch(
     `/api/applications/status/${applicationId}`,

@@ -5,10 +5,23 @@ interface ProtectedRouteProps {
   allowedRoles?: ("candidate" | "recruiter" | "admin")[];
 }
 
-const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const { isAuthenticated, user } = useAuthStore();
+// Helper to check JWT expiration
+const isTokenExpired = (token: string | null): boolean => {
+  if (!token) return true;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+};
 
-  if (!isAuthenticated) {
+const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
+  const { isAuthenticated, user, token, logout } = useAuthStore();
+
+  // If token is missing, expired, or state says unauthenticated
+  if (!isAuthenticated || !token || isTokenExpired(token)) {
+    logout(); // Clears Zustand state and localStorage ("auth-storage")
     return <Navigate to="/login" replace />;
   }
 

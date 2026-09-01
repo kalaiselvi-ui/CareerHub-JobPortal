@@ -17,6 +17,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     shortlisted: "bg-blue-50 text-blue-700 border-blue-200",
     rejected: "bg-rose-50 text-rose-700 border-rose-200",
     applied: "bg-purple-50 text-purple-700 border-purple-200",
+    viewed: "bg-rose-50 text-rose-700 border-rose-200",
   };
 
   const badgeStyle =

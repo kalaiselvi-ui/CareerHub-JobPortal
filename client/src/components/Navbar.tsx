@@ -116,6 +116,11 @@ const Navbar: React.FC = () => {
           icon: PlusCircle,
         },
         {
+          label: "Applications",
+          path: "/recruiter/my-applications",
+          icon: FileText,
+        },
+        {
           label: "Profile",
           path: "/profile",
           icon: User,

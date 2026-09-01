@@ -1,10 +1,19 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createApplicationApi } from "../api/applicationApi";
+import {
+  createApplicationApi,
+  updateApplicationStatusApi,
+} from "../api/applicationApi";
 
-export const applicationMutation = () => {
+type UpdateStatusParams = {
+  applicationId: string;
+  status: "applied" | "shortlisted" | "rejected" | "pending" | "viewed";
+};
+
+// 1. Standalone Create Application Hook
+export const useCreateApplication = () => {
   const queryClient = useQueryClient();
 
-  const createApplicationMutation = useMutation({
+  return useMutation({
     mutationFn: ({ jobId, formData }: { jobId: string; formData: FormData }) =>
       createApplicationApi(jobId, formData),
 
@@ -12,32 +21,30 @@ export const applicationMutation = () => {
       queryClient.invalidateQueries({
         queryKey: ["my-applications"],
       });
-
       queryClient.invalidateQueries({
         queryKey: ["recruiter-applications"],
       });
-
       queryClient.invalidateQueries({
         queryKey: ["job-applicants"],
       });
     },
   });
+};
 
-  //   const updateApplicationStatusMutation = useMutation({
-  //     mutationFn: updateApplicationStatusApi,
+// 2. Standalone Update Status Hook (This makes the import work!)
+export const useUpdateApplicationStatus = () => {
+  const queryClient = useQueryClient();
 
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["recruiter-applications"],
-  //       });
-
-  //       queryClient.invalidateQueries({
-  //         queryKey: ["job-applicants"],
-  //       });
-  //     },
-  //   });
-
-  return {
-    createApplicationMutation,
-  };
+  return useMutation({
+    mutationFn: ({ applicationId, status }: UpdateStatusParams) =>
+      updateApplicationStatusApi(applicationId, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["recruiter-applications"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["job-applicants"],
+      });
+    },
+  });
 };

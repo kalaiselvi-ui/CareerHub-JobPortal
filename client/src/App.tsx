@@ -22,6 +22,7 @@ import ApplyJobPage from "./components/application/ApplyJob.tsx";
 import CandidateDashboard from "./pages/candidate/Dashboard.tsx";
 import MyApplications from "./pages/candidate/MyApplications.tsx";
 import CandidateProfile from "./pages/candidate/Profile.tsx";
+import { RecruiterApplications } from "./pages/recruiter/Application.tsx";
 
 const Home = lazy(() => import("./pages/Home.tsx"));
 const Jobs = lazy(() => import("./pages/Jobs.tsx"));
@@ -67,17 +68,24 @@ const App = () => {
                 element={<RecruiterDashboard />}
               />
               <Route path="/recruiter/jobs" element={<MyJobsPage />} />
+              <Route
+                path="/recruiter/my-applications"
+                element={<RecruiterApplications />}
+              />
             </Route>
             <Route path="/jobs/:jobId/apply" element={<ApplyJobPage />} />
-            <Route
-              path="/candidate/dashboard"
-              element={<CandidateDashboard />}
-            />
-            <Route
-              path="/candidate/my-applications"
-              element={<MyApplications />}
-            />
-            <Route path="/candidate/profile" element={<CandidateProfile />} />
+
+            <Route element={<ProtectedRoutes allowedRoles={["candidate"]} />}>
+              <Route
+                path="/candidate/dashboard"
+                element={<CandidateDashboard />}
+              />
+              <Route
+                path="/candidate/my-applications"
+                element={<MyApplications />}
+              />
+              <Route path="/candidate/profile" element={<CandidateProfile />} />
+            </Route>
 
             <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
               <Route path="/categories/manage" element={<ManageCategories />} />

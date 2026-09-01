@@ -187,8 +187,7 @@ export const getRecruiterApplications = async (req, res) => {
         $in: jobIds,
       },
     })
-      .populate("userId", "fullName email")
-      .populate("jobId", "title")
+      .populate("userId", "fullName email headline bio skills location phone") // Added bio, skills, location, etc.      .populate("jobId", "title")
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
@@ -216,8 +215,24 @@ export const updateStatus = async (req, res) => {
     const { id: applicationId } = req.params;
     const { id: recruiterId, role } = req.user;
 
+    // 1. Validate status input
+    const validStatuses = [
+      "pending",
+      "applied",
+      "viewed",
+      "shortlisted",
+      "rejected",
+    ];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid application status value",
+      });
+    }
+
     if (role !== "recruiter") {
       return res.status(403).json({
+        success: false,
         message: "Only recruiters can update application status",
       });
     }
@@ -226,12 +241,12 @@ export const updateStatus = async (req, res) => {
 
     if (!application) {
       return res.status(404).json({
+        success: false,
         message: "Application not found",
       });
     }
 
-    // Check whether the application belongs to a job
-    // created by this recruiter
+    // Check whether the application belongs to a job created by this recruiter
     const job = await Job.findOne({
       _id: application.jobId,
       createdBy: recruiterId,
@@ -239,12 +254,12 @@ export const updateStatus = async (req, res) => {
 
     if (!job) {
       return res.status(403).json({
+        success: false,
         message: "You are not authorized to update this application",
       });
     }
 
     application.status = status;
-
     await application.save();
 
     return res.status(200).json({
@@ -254,14 +269,12 @@ export const updateStatus = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-
     return res.status(500).json({
       success: false,
       message: "Internal server error",
     });
   }
 };
-
 export const getCandidateDashboardStats = async (req, res) => {
   try {
     const { id: userId, role } = req.user;

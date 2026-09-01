@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Upload, Send, ArrowLeft, Loader2 } from "lucide-react";
-import { applicationMutation } from "../../mutations/applicationMutation.ts";
+import { useCreateApplication } from "../../mutations/applicationMutation";
 import toast from "react-hot-toast";
 
 export const ApplyJobPage: React.FC = () => {
@@ -11,8 +11,7 @@ export const ApplyJobPage: React.FC = () => {
   const [resume, setResume] = useState<File | null>(null);
   const [coverLetter, setCoverLetter] = useState("");
   const [error, setError] = useState("");
-  const { createApplicationMutation } = applicationMutation();
-
+  const createApplicationMutation = useCreateApplication();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!resume) {
