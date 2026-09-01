@@ -1,14 +1,15 @@
-import React from "react";
-import { X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { X, Loader2 } from "lucide-react";
 import type {
   Application,
   ApplicationStatus,
 } from "../../type/application.type";
+import { useUpdateApplicationStatus } from "../../mutations/applicationMutation.ts";
 
 interface ApplicationDetailsProps {
   application: Application | null;
   onClose: () => void;
-  onStatusChange: (id: string, newStatus: ApplicationStatus) => void;
+  onStatusChange?: (id: string, newStatus: ApplicationStatus) => void;
 }
 
 export const ApplicationDetails: React.FC<ApplicationDetailsProps> = ({
@@ -16,7 +17,40 @@ export const ApplicationDetails: React.FC<ApplicationDetailsProps> = ({
   onClose,
   onStatusChange,
 }) => {
+  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>(
+    application?.status || "pending",
+  );
+
+  // Hook handles mutation and loading state directly
+  const { mutate: updateStatus, isPending: isUpdating } =
+    useUpdateApplicationStatus();
+
+  // Synchronize local state whenever application prop updates
+  useEffect(() => {
+    if (application) {
+      setSelectedStatus(application.status);
+    }
+  }, [application]);
+
   if (!application) return null;
+
+  const hasStatusChanged = selectedStatus !== application.status;
+
+  const handleSave = () => {
+    if (hasStatusChanged) {
+      updateStatus(
+        { applicationId: application.id, status: selectedStatus },
+        {
+          onSuccess: () => {
+            if (onStatusChange) {
+              onStatusChange(application.id, selectedStatus);
+            }
+            onClose();
+          },
+        },
+      );
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -74,12 +108,9 @@ export const ApplicationDetails: React.FC<ApplicationDetailsProps> = ({
               Application Status:
             </label>
             <select
-              value={application.status}
+              value={selectedStatus}
               onChange={(e) =>
-                onStatusChange(
-                  application.id,
-                  e.target.value as ApplicationStatus,
-                )
+                setSelectedStatus(e.target.value as ApplicationStatus)
               }
               className="bg-gray-50 text-gray-900 border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
             >
@@ -118,6 +149,26 @@ export const ApplicationDetails: React.FC<ApplicationDetailsProps> = ({
             </div>
           </div>
         )}
+
+        {/* Action Footer */}
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={!hasStatusChanged || isUpdating}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isUpdating && <Loader2 className="w-4 h-4 animate-spin" />}
+            Save Status
+          </button>
+        </div>
       </div>
     </div>
   );

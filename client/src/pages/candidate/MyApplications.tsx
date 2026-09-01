@@ -20,7 +20,7 @@ export default function MyApplications() {
             </p>
           </div>
           <span className="self-start sm:self-auto inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20">
-            12 Applications
+            {applications.length} Applications
           </span>
         </div>
 
@@ -41,6 +41,7 @@ export default function MyApplications() {
               <option value="applied">Applied</option>
               <option value="shortlisted">Shortlisted</option>
               <option value="rejected">Rejected</option>
+              <option value="viewed">Viewed</option>
             </select>
 
             <select className="w-full sm:w-auto text-sm bg-surface-light border border-border-subtle rounded-lg px-3 py-2 text-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white transition-all cursor-pointer">

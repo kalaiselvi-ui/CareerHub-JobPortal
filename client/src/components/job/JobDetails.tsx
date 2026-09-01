@@ -7,6 +7,8 @@ import {
   Bookmark,
   Send,
   CheckCircle2,
+  ListChecks,
+  FileText,
 } from "lucide-react";
 import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
@@ -41,7 +43,6 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
     );
   }
 
-  // 2. Helper handler to navigate to the apply page
   const handleApply = () => {
     const jobId = job._id;
     if (jobId) {
@@ -52,6 +53,8 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
   const hasApplied = applications.some(
     (application) => application.jobId._id === job._id,
   );
+
+  console.log({ job });
 
   return (
     <div className="h-full bg-white border border-border-subtle rounded-2xl p-6 lg:p-8 overflow-y-auto space-y-8">
@@ -94,7 +97,6 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
           </div>
           <div className="flex items-center gap-1.5 bg-surface-light px-3 py-1.5 rounded-lg border border-border-subtle">
             <span>
-              {" "}
               {job.salary.currency} {job.salary.min.toLocaleString()} -{" "}
               {job.salary.max.toLocaleString()} / {job.salary.period}
             </span>
@@ -106,11 +108,7 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
           <div className="flex items-center gap-1.5 text-xs text-surface-dark/50 ml-auto">
             <Clock className="w-3.5 h-3.5" />
             <span>Posted {formatPostedDate(job?.createdAt)}</span>
-
-            <span>
-              {" "}
-              Apply before {formatDeadline(job?.applicationDeadline)}
-            </span>
+            <span>Apply before {formatDeadline(job?.applicationDeadline)}</span>
           </div>
         </div>
 
@@ -135,7 +133,7 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
                 <Send className="w-4 h-4" />
                 <span>Apply Now</span>
               </>
-            )}{" "}
+            )}
           </button>
           <button className="flex items-center justify-center gap-2 border border-border-subtle hover:border-primary text-surface-dark hover:text-primary font-semibold px-4 py-3 rounded-xl transition-all bg-white cursor-pointer">
             <Bookmark className="w-4 h-4" />
@@ -150,51 +148,51 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
         <p className="text-surface-dark/80 leading-relaxed text-sm sm:text-base">
           {job.description}
         </p>
+      </div>
 
-        {job.responsibilities && job.responsibilities.length > 0 && (
-          <div className="pt-2">
-            <h3 className="text-sm font-semibold text-surface-dark mb-2">
-              Key Responsibilities:
-            </h3>
-            <ul className="list-disc list-inside space-y-1 text-sm text-surface-dark/80 pl-1">
-              {job.responsibilities.map((resp, idx) => (
-                <li key={idx}>{resp}</li>
-              ))}
-            </ul>
+      {/* Responsibilities Box */}
+      {job.responsibilities && job.responsibilities.length > 0 && (
+        <div className="bg-surface-light border border-border-subtle rounded-xl p-5 space-y-4">
+          <div className="flex items-center gap-2 text-surface-dark">
+            <FileText className="w-5 h-5 text-primary" />
+            <h2 className="text-base font-bold">Key Responsibilities</h2>
           </div>
-        )}
-      </div>
-
-      {/* Required Skills */}
-      <div className="space-y-3">
-        <h2 className="text-lg font-bold text-surface-dark">Required Skills</h2>
-        <div className="flex flex-wrap gap-2">
-          {job.skills.map((skill, index) => (
-            <span
-              key={index}
-              className="bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-lg border border-primary/20"
-            >
-              {skill}
-            </span>
-          ))}
+          <div className="space-y-2.5">
+            {job.responsibilities.map((resp, idx) => (
+              <div
+                key={idx}
+                className="flex items-start gap-2.5 text-xs sm:text-sm text-surface-dark/80"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-2" />
+                <span className="leading-relaxed">{resp}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Requirements Section */}
-      <div className="space-y-3">
-        <h2 className="text-lg font-bold text-surface-dark">Requirements</h2>
-        <div className="space-y-2">
-          {job.requirements.map((req, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-2 text-sm text-surface-dark/80"
-            >
-              <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-              <span>{req}</span>
-            </div>
-          ))}
+      {/* Requirements Box */}
+      {job.requirements && job.requirements.length > 0 && (
+        <div className="bg-surface-light border border-border-subtle rounded-xl p-5 space-y-4">
+          <div className="flex items-center gap-2 text-surface-dark">
+            <ListChecks className="w-5 h-5 text-primary" />
+            <h2 className="text-base font-bold">
+              Requirements & Qualifications
+            </h2>
+          </div>
+          <div className="space-y-2.5">
+            {job.requirements.map((req, index) => (
+              <div
+                key={index}
+                className="flex items-start gap-2.5 text-xs sm:text-sm text-surface-dark/80"
+              >
+                <CheckCircle2 className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <span className="leading-relaxed">{req}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Additional Information Grid */}
       <div className="bg-surface-light border border-border-subtle rounded-xl p-5 space-y-4">
@@ -229,9 +227,8 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
           <div className="col-span-2">
             <p className="text-surface-dark/50 font-medium">Salary Range</p>
             <p className="font-semibold text-surface-dark mt-0.5">
-              {" "}
               {job.salary.currency} {job.salary.min.toLocaleString()} -{" "}
-              {job.salary.max.toLocaleString()} / {job.salary.period}{" "}
+              {job.salary.max.toLocaleString()} / {job.salary.period}
             </p>
           </div>
         </div>

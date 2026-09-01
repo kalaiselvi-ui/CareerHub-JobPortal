@@ -15,6 +15,8 @@ export const createJob = async (req, res) => {
       experienceLevel,
       workMode,
       applicationDeadline,
+      responsibilities,
+      requirements,
       status,
     } = req.body;
     const { id, role } = req.user;
@@ -49,6 +51,8 @@ export const createJob = async (req, res) => {
       status,
       category,
       workMode,
+      responsibilities: responsibilities || [],
+      requirements: requirements || [],
       experienceLevel,
       companyLogo: companyLogo?.secure_url,
       createdBy: id,
@@ -69,7 +73,9 @@ export const createJob = async (req, res) => {
 
 export const getAllJob = async (req, res) => {
   try {
-    const jobs = await Job.find().populate("createdBy", "name email");
+    const jobs = await Job.find()
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
     if (!jobs) {
       return res.status(404).json({ message: "Job not found" });
     }
@@ -118,6 +124,8 @@ export const updateJob = async (req, res) => {
       experienceLevel,
       workMode,
       applicationDeadline,
+      responsibilities,
+      requirements,
       status,
     } = req.body;
 
@@ -157,6 +165,8 @@ export const updateJob = async (req, res) => {
     job.jobType = jobType ?? job.jobType;
     job.experienceLevel = experienceLevel ?? job.experienceLevel;
     job.workMode = workMode ?? job.workMode;
+    job.responsibilities = responsibilities ?? job.responsibilities;
+    job.requirements = requirements ?? job.requirements;
 
     if (req.file) {
       const companyLogo = await uploadImageToCloudinary(req.file.buffer);

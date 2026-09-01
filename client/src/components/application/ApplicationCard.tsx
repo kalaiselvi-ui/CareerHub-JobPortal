@@ -26,7 +26,7 @@ export const ApplicationCard: React.FC<ApplicationCardProps> = ({
               className="w-12 h-12 rounded-full object-cover border border-border"
             />
           ) : (
-            <div className="w-12 h-12 rounded-full bg-muted text-muted-foreground flex items-center justify-center font-bold text-lg">
+            <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-bold text-lg">
               {application.candidateName.charAt(0)}
             </div>
           )}
