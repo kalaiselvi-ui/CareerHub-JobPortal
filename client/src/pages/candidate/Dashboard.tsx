@@ -227,7 +227,7 @@ export default function CandidateDashboard() {
             </div>
 
             <div className="flex items-center sm:self-center">
-              <button className="w-full sm:w-auto px-4 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-lg transition-colors whitespace-nowrap shadow-xs cursor-pointer">
+              <button onClick={() => navigate("/candidate/profile")} className="w-full sm:w-auto px-4 py-2.5 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-lg transition-colors whitespace-nowrap shadow-xs cursor-pointer">
                 Complete Profile
               </button>
             </div>

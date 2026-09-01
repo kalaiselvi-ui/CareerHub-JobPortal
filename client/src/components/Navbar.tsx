@@ -142,7 +142,7 @@ const Navbar: React.FC = () => {
       },
       {
         label: "Profile",
-        path: "/profile",
+        path: "/candidate/profile",
         icon: User,
       },
     ];
