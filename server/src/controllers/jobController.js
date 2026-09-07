@@ -73,7 +73,27 @@ export const createJob = async (req, res) => {
 
 export const getAllJob = async (req, res) => {
   try {
-    const jobs = await Job.find()
+    const { search, location, jobType, workMode, experienceLevel } = req.query;
+    const filter = {};
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { company: { $regex: search, $options: "i" } },
+      ];
+    }
+    if (location) {
+      filter.location = { $regex: location, $options: "i" };
+    }
+    if (jobType) {
+      filter.jobType = jobType;
+    }
+    if (workMode) {
+      filter.workMode = workMode;
+    }
+    if (experienceLevel) {
+      filter.experienceLevel = experienceLevel;
+    }
+    const jobs = await Job.find(filter)
       .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
     if (!jobs) {

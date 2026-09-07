@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import TopFilters from "../components/job/TopFilters.tsx";
 import JobList from "../components/job/JobList.tsx";
 import JobDetails from "../components/job/JobDetails.tsx";
@@ -11,7 +11,10 @@ export const JobsPage: React.FC = () => {
   const navigate = useNavigate();
   const [selectedJob, setSelectedJob] = useState<DetailedJob | null>(null);
   const [showMobileDetails, setShowMobileDetails] = useState<boolean>(false);
-  const { data: jobs = [], isLoading, isError } = useJobs();
+  const [searchParams] = useSearchParams();
+  const filters = Object.fromEntries(searchParams.entries());
+
+  const { data: jobs = [], isLoading, isError } = useJobs(filters);
   useEffect(() => {
     if (id) {
       setShowMobileDetails(true);

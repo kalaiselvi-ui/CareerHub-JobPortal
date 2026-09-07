@@ -1,9 +1,23 @@
+import type { JobFilters } from "../hooks/useJob.ts";
 import type { JobFormData } from "../schemas/jobSchema.ts";
 import type { DetailedJob } from "../type/job.type.ts";
 import axiosInstance from "./axiosInstance.ts";
 
-export const getJobs = async (): Promise<DetailedJob[]> => {
-  const response = await axiosInstance.get("/api/jobs/");
+export const getJobs = async (filters?: JobFilters): Promise<DetailedJob[]> => {
+  const params: Record<string, string> = {};
+  if (filters) {
+    if (filters.search) params.search = filters.search;
+    if (filters.jobType && filters.jobType !== "all")
+      params.jobType = filters.jobType;
+    if (filters.workMode && filters.workMode !== "all")
+      params.workMode = filters.workMode;
+    if (filters.experienceLevel && filters.experienceLevel !== "any") {
+      params.experienceLevel = filters.experienceLevel;
+    }
+    if (filters.sortBy && filters.sortBy !== "recent")
+      params.sortBy = filters.sortBy;
+  }
+  const response = await axiosInstance.get("/api/jobs/", { params });
   return response.data.data;
 };
 

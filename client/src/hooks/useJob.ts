@@ -1,10 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { getJobById, getJobs, getMyJobs } from "../api/jobApi.ts";
 
-export const useJobs = () => {
+export interface JobFilters {
+  search?: string;
+  jobType?: string;
+  experienceLevel?: string;
+  workMode?: string;
+  sortBy?: string;
+}
+
+export const useJobs = (filters?: JobFilters) => {
   return useQuery({
-    queryKey: ["jobs"],
-    queryFn: getJobs,
+    queryKey: [
+      "jobs",
+      filters?.search,
+      filters?.jobType,
+      filters?.workMode,
+      filters?.experienceLevel,
+      filters?.sortBy,
+    ],
+    queryFn: () => getJobs(filters),
   });
 };
 

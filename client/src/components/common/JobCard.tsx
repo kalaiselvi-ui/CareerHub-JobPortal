@@ -58,10 +58,30 @@ const JobCard = ({ job, isSelected, onClick }: JobCardComponentProps) => {
           </div>
 
           <div className="flex flex-col items-start gap-3 text-xs sm:text-sm text-surface-dark/70 font-medium pt-1">
-            <div className="flex w-full justify-between gap-1.5 ">
-              <div className="bg-surface-light flex gap-1 items-center px-2.5 py-1 rounded-md border border-border-subtle">
-                <MapPin className="w-3.5 h-3.5 text-primary" />
-                <span>{job.location}</span>
+            <div className="flex w-full justify-between gap-1.5">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {/* Location Badge */}
+                <div className="bg-surface-light flex gap-1 items-center px-2.5 py-1 rounded-md border border-border-subtle">
+                  <MapPin className="w-3.5 h-3.5 text-primary" />
+                  <span>{job.location}</span>
+                </div>
+
+                {/* Work Mode Badge */}
+                {job.workMode && (
+                  <div
+                    className={`flex gap-1 items-center px-2.5 py-1 rounded-md border text-xs font-semibold capitalize ${
+                      job.workMode.toLowerCase() === "remote"
+                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                        : job.workMode.toLowerCase() === "hybrid"
+                          ? "bg-purple-50 text-purple-700 border-purple-200"
+                          : "bg-blue-50 text-blue-700 border-blue-200" // On-site default
+                    }`}
+                  >
+                    {" "}
+                    <Building className="w-3.5 h-3.5 text-surface-dark/60" />
+                    <span>{job.workMode}</span>
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-1.5 bg-primary/10 text-primary px-2.5 py-1 rounded-md font-semibold">
                 <Briefcase className="w-3.5 h-3.5" />
