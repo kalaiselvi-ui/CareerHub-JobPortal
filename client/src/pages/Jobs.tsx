@@ -5,6 +5,7 @@ import JobList from "../components/job/JobList.tsx";
 import JobDetails from "../components/job/JobDetails.tsx";
 import type { DetailedJob } from "../type/job.type.ts";
 import { useJobs } from "../hooks/useJob.ts";
+import LoadingSpinner from "../components/common/LoadingSpinner.tsx";
 
 export const JobsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,7 +33,11 @@ export const JobsPage: React.FC = () => {
   }, [id, jobs]);
 
   if (isLoading) {
-    return <div>Loading jobs...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {

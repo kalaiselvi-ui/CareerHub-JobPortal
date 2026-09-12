@@ -10,6 +10,7 @@ import { jobMutation } from "../../mutations/jobMutation";
 import toast from "react-hot-toast";
 import { useCategories } from "../../hooks/useCategories.ts";
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from "../../components/common/LoadingSpinner.tsx";
 
 export const CreateJob = () => {
   const [skillInput, setSkillInput] = useState("");
@@ -64,7 +65,11 @@ export const CreateJob = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {

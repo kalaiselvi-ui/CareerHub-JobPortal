@@ -447,6 +447,7 @@ export default function CandidateProfile() {
             basicInfo={basicInfo}
             completionPercentage={completionPercentage}
             onEdit={() => setActiveModal("basic")}
+            experiences={experiences} // <-- Pass array from your profile query/state
           />
 
           <ProfileCompletion completionItems={completionItems} />

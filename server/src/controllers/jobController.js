@@ -1,5 +1,6 @@
 import { uploadImageToCloudinary } from "../../utils/uploadImage.js";
 import Job from "../models/job.model.js";
+import { getSkillMatch } from "../services/matchingService.js";
 
 export const createJob = async (req, res) => {
   try {
@@ -274,6 +275,26 @@ export const getMyJobs = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Internal server error",
+    });
+  }
+};
+
+export const getJobSkillMatch = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { id: userId } = req.user;
+
+    const result = await getSkillMatch(id, userId);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to calculate skill match",
     });
   }
 };

@@ -9,12 +9,16 @@ import {
   CheckCircle2,
   ListChecks,
   FileText,
+  Sparkles,
+  Check,
+  X,
 } from "lucide-react";
 import type { DetailedJob } from "../../type/job.type.ts";
 import { formatPostedDate } from "../../utils/formatDate.ts";
 import { formatDeadline } from "../../utils/formatDeadline.ts";
 import { useNavigate } from "react-router-dom";
 import { useMyApplications } from "../../hooks/useApplication.ts";
+import { useJobSkillMatch } from "../../hooks/useJob.ts";
 
 interface JobDetailsProps {
   job: DetailedJob | null;
@@ -27,6 +31,10 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
 }) => {
   const navigate = useNavigate();
   const { data: applications = [] } = useMyApplications();
+
+  const { data: skillMatchResponse, isFetching: isMatchLoading } =
+    useJobSkillMatch(job?._id);
+  const matchData = skillMatchResponse?.data;
 
   if (!job) {
     return (
@@ -53,8 +61,6 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
   const hasApplied = applications.some(
     (application) => application.jobId._id === job._id,
   );
-
-  console.log({ job });
 
   return (
     <div className="h-full bg-white border border-border-subtle rounded-2xl p-6 lg:p-8 overflow-y-auto space-y-8">
@@ -140,6 +146,76 @@ export const JobDetails: React.FC<JobDetailsProps> = ({
             <span className="hidden sm:inline">Save Job</span>
           </button>
         </div>
+      </div>
+
+      {/* Skill Match Widget */}
+      <div className="mt-4 bg-surface-light border border-border-subtle rounded-xl p-4 space-y-3">
+        {isMatchLoading ? (
+          <div className="flex items-center gap-2 text-xs text-surface-dark/60">
+            <Sparkles className="w-4 h-4 animate-spin text-primary" />
+            <span>Calculating skill match...</span>
+          </div>
+        ) : matchData ? (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 font-bold text-sm text-surface-dark">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <span>Skill Match Profile</span>
+              </div>
+              <span
+                className={`text-xs font-extrabold px-2.5 py-1 rounded-full ${
+                  matchData.percentage >= 75
+                    ? "bg-emerald-100 text-emerald-700"
+                    : matchData.percentage >= 40
+                      ? "bg-amber-100 text-amber-700"
+                      : "bg-red-100 text-red-700"
+                }`}
+              >
+                {matchData.percentage}% Match
+              </span>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-border-subtle/50 h-2 rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all duration-500 rounded-full ${
+                  matchData.percentage >= 75
+                    ? "bg-emerald-500"
+                    : matchData.percentage >= 40
+                      ? "bg-amber-500"
+                      : "bg-red-500"
+                }`}
+                style={{ width: `${matchData.percentage}%` }}
+              />
+            </div>
+
+            {/* Matched vs Missing Skills */}
+            <div className="flex flex-wrap gap-1.5 pt-1 text-xs">
+              {matchData.matchedSkills?.map((skill: string, idx: number) => (
+                <span
+                  key={`matched-${idx}`}
+                  className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 px-2 py-0.5 rounded-md font-medium capitalize"
+                >
+                  <Check className="w-3 h-3" />
+                  {skill}
+                </span>
+              ))}
+              {matchData.missingSkills?.map((skill: string, idx: number) => (
+                <span
+                  key={`missing-${idx}`}
+                  className="inline-flex items-center gap-1 bg-gray-100 text-gray-500 border border-gray-200 px-2 py-0.5 rounded-md font-medium capitalize"
+                >
+                  <X className="w-3 h-3" />
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </>
+        ) : (
+          <p className="text-xs text-surface-dark/50">
+            Complete your profile skills to see match details.
+          </p>
+        )}
       </div>
 
       {/* About this role */}

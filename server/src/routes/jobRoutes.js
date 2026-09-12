@@ -4,6 +4,7 @@ import {
   deleteJob,
   getAllJob,
   getJobById,
+  getJobSkillMatch,
   getMyJobs,
   updateJob,
 } from "../controllers/jobController.js";
@@ -23,7 +24,7 @@ jobRoutes.post(
 jobRoutes.get("/", getAllJob);
 // 2. Specific Named Routes (MUST come before dynamic :id routes)
 jobRoutes.get("/my-jobs", authMiddleware, getMyJobs);
-jobRoutes.get("/:id", getJobById);
+jobRoutes.get("/:id", authMiddleware, getJobById);
 jobRoutes.put(
   "/:id",
   authMiddleware,
@@ -36,5 +37,7 @@ jobRoutes.delete(
   authorizeRoles("admin", "recruiter"),
   deleteJob,
 );
+
+jobRoutes.get("/:id/skill-match", authMiddleware, getJobSkillMatch);
 
 export default jobRoutes;

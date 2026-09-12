@@ -1,5 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getJobById, getJobs, getMyJobs } from "../api/jobApi.ts";
+import {
+  getJobById,
+  getJobs,
+  getJobSkillMatchApi,
+  getMyJobs,
+} from "../api/jobApi.ts";
 
 export interface JobFilters {
   search?: string;
@@ -36,5 +41,13 @@ export const useMyJobs = () => {
   return useQuery({
     queryKey: ["my-jobs"],
     queryFn: getMyJobs,
+  });
+};
+
+export const useJobSkillMatch = (jobId?: string) => {
+  return useQuery({
+    queryKey: ["my-jobs", "jobSkillMatch", jobId],
+    queryFn: () => getJobSkillMatchApi(jobId!),
+    enabled: Boolean(jobId), // Only run the query if jobId exists
   });
 };

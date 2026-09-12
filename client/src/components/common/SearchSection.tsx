@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Search, MapPin, Briefcase } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface SearchSectionProps {
   compact?: boolean;
@@ -8,19 +9,38 @@ interface SearchSectionProps {
 export const SearchSection: React.FC<SearchSectionProps> = ({
   compact = false,
 }) => {
+  const navigate = useNavigate();
+
+  // Local state for inputs
+  const [search, setSearch] = useState("");
+  const [location, setLocation] = useState("");
+  const [jobType, setJobType] = useState("");
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Build search parameters dynamically
+    const params = new URLSearchParams();
+    if (search.trim()) params.set("search", search.trim());
+    if (location.trim()) params.set("location", location.trim());
+    if (jobType && jobType !== "all") params.set("jobType", jobType);
+
+    // Navigate to /jobs with query parameters attached
+    const queryString = params.toString();
+    navigate(`/jobs${queryString ? `?${queryString}` : ""}`);
+  };
+
   return (
     <section
       className={`bg-surface-light px-4 sm:px-6 lg:px-8 ${
         compact ? "py-4" : "py-12 md:py-16"
       }`}
     >
-      {" "}
       <div
         className={`max-w-7xl mx-auto text-center ${
           compact ? "space-y-4" : "space-y-8"
         }`}
       >
-        {" "}
         <div className="max-w-2xl mx-auto space-y-3">
           <h2
             className={`font-extrabold text-surface-dark tracking-tight ${
@@ -33,42 +53,48 @@ export const SearchSection: React.FC<SearchSectionProps> = ({
         </div>
         <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-xl shadow-surface-dark/5 border border-border-subtle max-w-5xl mx-auto">
           <form
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleSearchSubmit}
             className="flex flex-col lg:flex-row items-center gap-4"
           >
+            {/* Search Keywords Input */}
             <div className="relative w-full flex-1">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-dark/40">
                 <Search className="w-5 h-5" />
               </div>
               <input
                 type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 placeholder="Job title, skills or keywords"
                 className="w-full pl-11 pr-4 py-3.5 bg-surface-light border border-border-subtle rounded-xl text-surface-dark placeholder-surface-dark/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
             </div>
 
+            {/* Location Input */}
             <div className="relative w-full flex-1">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-dark/40">
                 <MapPin className="w-5 h-5" />
               </div>
               <input
                 type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 placeholder="Location"
                 className="w-full pl-11 pr-4 py-3.5 bg-surface-light border border-border-subtle rounded-xl text-surface-dark placeholder-surface-dark/50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
               />
             </div>
 
+            {/* Job Type Dropdown */}
             <div className="relative w-full lg:w-48">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-dark/40">
                 <Briefcase className="w-5 h-5" />
               </div>
               <select
-                defaultValue=""
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
                 className="w-full pl-11 pr-8 py-3.5 bg-surface-light border border-border-subtle rounded-xl text-surface-dark focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200 appearance-none cursor-pointer"
               >
-                <option value="" disabled hidden>
-                  Job Type
-                </option>
+                <option value="">Job Type</option>
                 <option value="full-time">Full Time</option>
                 <option value="part-time">Part Time</option>
                 <option value="contract">Contract</option>
@@ -81,6 +107,7 @@ export const SearchSection: React.FC<SearchSectionProps> = ({
               </div>
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               className="w-full lg:w-auto flex items-center justify-center gap-2 bg-primary hover:bg-primary-hover text-white font-semibold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-md shadow-primary/20 shrink-0 cursor-pointer"

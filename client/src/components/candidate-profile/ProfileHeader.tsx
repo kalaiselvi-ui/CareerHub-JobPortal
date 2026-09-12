@@ -1,17 +1,23 @@
-import { Mail, MapPin, Pencil, Phone } from "lucide-react";
+import { Briefcase, Mail, MapPin, Pencil, Phone } from "lucide-react";
 import type { BasicInfoForm } from "../../pages/candidate/Profile.tsx";
+import {
+  calculateTotalExperience,
+  type Experience,
+} from "../../utils/calculateExperience.ts";
 
 interface ProfileHeaderProps {
   basicInfo: BasicInfoForm;
   onEdit: () => void;
+  experiences?: Experience[]; // <-- Pass experiences as a prop
   completionPercentage: number;
 }
 const ProfileHeader = ({
   basicInfo,
   completionPercentage,
+  experiences = [], // <-- Default to empty array
   onEdit,
 }: ProfileHeaderProps) => {
-  console.log({ basicInfo });
+  const totalExperience = calculateTotalExperience(experiences);
   return (
     <div>
       <div className="bg-white rounded-2xl border border-border-subtle p-6 shadow-xs relative overflow-hidden">
@@ -23,6 +29,7 @@ const ProfileHeader = ({
                 .map((n) => n[0])
                 .join("")}
             </div>
+
             <div className="space-y-1">
               <div className="flex items-center gap-3 flex-wrap">
                 <h2 className="text-xl font-bold text-slate-900">
@@ -57,6 +64,10 @@ const ProfileHeader = ({
                     {basicInfo.phone}
                   </span>
                 )}
+                <div className="flex items-center gap-1.5 ">
+                  <Briefcase className="w-4 h-4" />
+                  <span>{totalExperience} Experience</span>
+                </div>
               </div>
             </div>
           </div>

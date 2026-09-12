@@ -2,6 +2,7 @@ import React from "react";
 import { useCategories } from "../../hooks/useCategories.ts";
 import { ArrowRight, BriefcaseBusiness } from "lucide-react";
 import { categoryIcons } from "../../constants/categoryIcons.ts";
+import LoadingSpinner from "../common/LoadingSpinner.tsx";
 
 // const categoriesData: Category[] = [
 //   { id: "1", name: "Frontend Developer", jobsCount: 120, icon: Layout },
@@ -16,7 +17,11 @@ export const Categories: React.FC = () => {
   const { data, isLoading, isError } = useCategories();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {

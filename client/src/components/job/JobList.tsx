@@ -3,6 +3,7 @@ import JobCard from "../common/JobCard.tsx"; // Reusing your existing JobCard
 import type { DetailedJob } from "../../type/job.type.ts";
 import { useJobs } from "../../hooks/useJob.ts";
 import { useSearchParams } from "react-router-dom";
+import LoadingSpinner from "../common/LoadingSpinner.tsx";
 
 interface JobListProps {
   jobs: DetailedJob[];
@@ -26,7 +27,11 @@ export const JobList: React.FC<JobListProps> = ({
 
   const { data: jobs = [], isLoading, isError } = useJobs(filters);
   if (isLoading) {
-    return <div>Loading jobs...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError) {

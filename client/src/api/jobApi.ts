@@ -52,3 +52,9 @@ export const getMyJobs = async (): Promise<DetailedJob[]> => {
   const response = await axiosInstance.get("/api/jobs/my-jobs");
   return response.data.data;
 };
+
+export const getJobSkillMatchApi = async (jobId: string) => {
+  const response = await axiosInstance.get(`/api/jobs/${jobId}/skill-match`);
+
+  return response.data;
+};
