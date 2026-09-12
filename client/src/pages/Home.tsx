@@ -1,4 +1,4 @@
-import Categories from "../components/home/Categories.tsx";
+// import Categories from "../components/home/Categories.tsx";
 import CTASection from "../components/home/CTA.tsx";
 import FeaturedJobs from "../components/home/FeaturedJob.tsx";
 import HeroSection from "../components/home/Hero.tsx";
